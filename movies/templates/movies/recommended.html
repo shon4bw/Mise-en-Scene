@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% for movie in random_movies %}
+  <h2>{{ movie.title }}</h2>
+  <img src="{{ movie.poster_path }}" alt="poster">
+  <hr>
+{% endfor %}
+
+{% endblock %}
+
