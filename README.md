@@ -26,7 +26,7 @@ UI & ERD
 
 2. ERD 작성
 
-![image-20211117145141546](C:\Users\choiy\AppData\Roaming\Typora\typora-user-images\image-20211117145141546.png)
+![](README.assets/image-20211117145141546.png)
 
 
 
