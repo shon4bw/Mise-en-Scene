@@ -149,3 +149,26 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 SITE_ID = 1
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        'APP': {
+            'client_id': '421208046472-7bb938cn1dj84nquncr3m78odni9407o.apps.googleusercontent.com',
+            'secret': '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',
+            'key': ''
+        }
+    },
+    'github': {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        'APP': {
+            'client_id': '01cc0f893f6fa6f608e7',
+            'secret': '3ddd75046f7ca329b72a3ad6a5ebb8d6cecac900',
+            'key': ''
+        }
+    }
+}
