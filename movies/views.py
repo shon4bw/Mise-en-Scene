@@ -1,7 +1,8 @@
 from django.http.response import JsonResponse
+import requests
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.http import require_safe
-from .models import Movie
+from .models import Movie, Genre
 from django.core.paginator import Paginator
 from django.core import serializers
 from django.http import HttpResponse
@@ -10,23 +11,52 @@ import random
 # Create your views here.
 @require_safe
 def index(request):
-    movies = Movie.objects.all()
-    paginator = Paginator(movies, 10)
+    # movies = Movie.objects.all()
+    # paginator = Paginator(movies, 10)
 
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    # page_number = request.GET.get('page')
+    # page_obj = paginator.get_page(page_number)
 
-    # /movies/?page=2 ajax 요청 => json
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        data = serializers.serialize('json', page_obj)
-        return HttpResponse(data, content_type='application/json')
-    # /movies/ 첫번째 페이지 요청 => html
-    else:
-        context = {
-            'movies': page_obj,
-        }
+    # # /movies/?page=2 ajax 요청 => json
+    # if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+    #     data = serializers.serialize('json', page_obj)
+    #     return HttpResponse(data, content_type='application/json')
+    # # /movies/ 첫번째 페이지 요청 => html
+    # else:
+    #     context = {
+    #         'movies': page_obj,
+    #     }
 
-        return render(request, 'movies/index.html', context)
+    #     return render(request, 'movies/index.html', context)
+    
+    for page in range(1, 6):
+        API_KEY = 'be07aab38070bed23b07aa9d9da3e0e2'
+        url = f'https://api.themoviedb.org/3/movie/top_rated?api_key={API_KEY}&language=ko-KR&page={page}&region=KR'
+        movie_dict = requests.get(url).json()
+        movies = movie_dict.get('results')
+        for movie in movies:
+            context = {
+                # "tmdb_id": movie.get('id'),
+                "title" : movie.get('title'),
+                "release_date": movie.get('release_date'),
+                "popularity": movie.get('popularity'),
+                "vote_count": movie.get('vote_count'),
+                "vote_average": movie.get('vote_average'),
+                "overview": movie.get('overview'),
+                "poster_path": movie.get('poster_path'),
+            }
+            movie = Movie.objects.create(**context)
+            genre, created = Genre.objects.get_or_create(name='genre_id')
+            genre.value = request.POST.get('genre_id')
+            genre.save()
+            movie.genres.add(genre)
+        movies = Movie.objects.all()
+        for movie in movies:
+            movie.genres.all()
+    context = {
+        'movies' : movies
+    }
+    return render(request, 'movies/index.html', context)
 
 
 @require_safe
