@@ -1,11 +1,16 @@
 {% extends 'base.html' %}
 {% load bootstrap5 %}
+{% load socialaccount %}
 
 {% block content %}
-<h1>회원가입</h1>
-<form action="" method="POST">
-  {% csrf_token %}
-  {% bootstrap_form form %}
-  <input type="submit">
-</form>
+<div style="padding: 20px 300px;">
+  <h1>회원가입</h1>
+  <form action="" method="POST">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    <input type="submit">
+  </form>
+  <a href="{% provider_login_url "google" next="/movies/" %}">Google 계정으로 계속하기</a>
+  <a href="{% provider_login_url "naver" next="/movies/" %}">NAVER 계정으로 계속하기</a>
+</div>
 {% endblock  %}

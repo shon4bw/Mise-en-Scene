@@ -82,3 +82,22 @@ def recommended(request):
     }
     
     return render(request, 'movies/recommended.html', context)
+
+def mybox(request):
+    movies = Movie.objects.all()
+    paginator = Paginator(movies, 10)
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    # /movies/?page=2 ajax 요청 => json
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        data = serializers.serialize('json', page_obj)
+        return HttpResponse(data, content_type='application/json')
+    # /movies/ 첫번째 페이지 요청 => html
+    else:
+        context = {
+            'movies': page_obj,
+        }
+
+        return render(request, 'movies/mybox.html', context)
