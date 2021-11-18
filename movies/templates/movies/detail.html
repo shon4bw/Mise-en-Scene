@@ -4,6 +4,7 @@
   <h2>영화 단일 정보</h2>
   <h3>{{ movie.title }}</h3>
   <hr>
+  <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" alt="poster">
   <p>개봉일: {{ movie.release_date }}</p>
   <p>관객수: {{ movie.popularity }}</p>
   <p>평점: {{ movie.vote_average }}</p>
