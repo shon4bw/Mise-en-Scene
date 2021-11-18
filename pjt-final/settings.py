@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.github',
+    'allauth.socialaccount.providers.kakao',
+    'allauth.socialaccount.providers.naver',
     'allauth.socialaccount.providers.google',
 
     'django.contrib.admin',
@@ -161,13 +162,13 @@ SOCIALACCOUNT_PROVIDERS = {
             'key': ''
         }
     },
-    'github': {
+    'naver': {
         # For each OAuth based provider, either add a ``SocialApp``
         # (``socialaccount`` app) containing the required client
         # credentials, or list them here:
         'APP': {
-            'client_id': '52ca549e8b1becc4f6b1',
-            'secret': 'dc2861a78c7a5a377bdbe5ab9b70a2d03be00d90',
+            'client_id': '3lYQktTT1ACVGf9wMXUY',
+            'secret': 'dhj4_yRvCL',
             'key': ''
         }
     }
