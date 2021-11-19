@@ -9,28 +9,64 @@
 <body style="background-color:#343a40">
   <!-- CSS style 모음 파일 -->
   {% include '_style.html' %}
+  
+  <nav class="navbar justify-content-evenly py-2">
+    {% if user.is_authenticated %}
+      <ul class="d-flex flex-row align-items-center list-unstyled my-0">
+        <li class="mx-2">
+          <a href="{% url 'movies:index'%}">Movie</a>
+        </li>
 
+        <li class="mx-2">
+          <a href="{% url 'community:index'%}">Community</a>
+        </li>
+
+        <li class="mx-2">
+          <a href="{% url 'movies:mybox'%}">My Box</a> 
+        </li>
+
+        <li class="mx-2">
+          <form action="{% url 'accounts:logout' %}" method="POST">
+            {% csrf_token %}
+            <input type="submit" value="Logout">
+          </form>
+        </li>
+
+        <li class="mx-2">
+          <div class="profile_box">
+            {% if user.image %}
+            <a href="{% url 'accounts:profile' request.user.username %}">
+              <img class="profile_img" src="{{ user.image.url }}" alt="프로필 사진">
+            </a>
+            {% else %}
+            <a href="{% url 'accounts:profile' request.user.username %}">
+              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+              </svg>
+            </a>
+            {% endif %}
+          </div>
+        </li>
+      </ul>
+    {% else %}
+      <ul class="d-flex flex-row align-items-center list-unstyled my-0">
+        <li class="mx-2">
+          <a href="{% url 'accounts:signup' %}">Signup</a>
+        </li>
+        <li class="mx-2">
+          <a href="{% url 'accounts:login' %}">Login</a>
+        </li>
+      </ul>
+    {% endif %}
+      <ul class="d-flex flex-row align-items-center list-unstyled my-0">          
+        <li class="mx-2">
+          <input class="form-control" style="width: 200px" type="search" placeholder="Search" aria-label="Search">
+        </li>
+      </ul>
+  </nav>
 
   <div class="container">
-    <nav>
-      {% if user.is_authenticated %}
-      <h3>Hello, {{ user.username }}</h3>
-      <a href="{% url 'accounts:profile' user %}">내 프로필<a>
-      <form action="{% url 'accounts:logout' %}" method="POST">
-        {% csrf_token %}
-        <input type="submit" value="Logout">
-      </form>
-      <a href="{% url 'movies:index'%}">Movie</a>
-      <a href="{% url 'community:index'%}">Community</a>
-      <a href="{% url 'movies:mybox'%}">My Box</a> 
-
-      {% else %}
-
-      <a href="{% url 'accounts:signup' %}">Signup</a>
-      <a href="{% url 'accounts:login' %}">Login</a>
-
-      {% endif %}
-    </nav>
     {% block content %}
     {% endblock %}
   </div>

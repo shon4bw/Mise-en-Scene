@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST, require_http_methods
 from .forms import CustomUserCreationForm
 from django.http import JsonResponse
+from community.models import Review
 
 @require_http_methods(['GET', 'POST'])
 def signup(request):
@@ -14,7 +15,7 @@ def signup(request):
         return redirect('community:index')
 
     if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST, request.FILES)
         if form.is_valid():
             user = form.save()
             auth_login(request, user, backend='django.contrib.auth.backends.ModelBackend')
@@ -54,8 +55,12 @@ def logout(request):
 @login_required
 def profile(request, username):
     person = get_object_or_404(get_user_model(), username=username)
+    is_following = person.followings.filter(pk=request.user.pk).exists()
+    articles = Review.objects.filter(user_id=person.id).order_by('-pk')
     context = {
         'person': person,
+        'is_following': is_following,
+        'articles': articles,
     }
     return render(request, 'accounts/profile.html', context)
 
