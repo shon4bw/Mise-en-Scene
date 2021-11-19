@@ -3,6 +3,7 @@
 {% block content %}
   <h1>Community</h1>
   <hr>
+  <a href="{% url 'community:create'%}">New Review</a>
   {% for review in reviews %}
     <p>작성자 : <a href="{% url 'accounts:profile' review.user.username %}">{{ review.user }}</a></p>
     <p>글 번호: {{ review.pk }}</p>
@@ -33,8 +34,6 @@
   likeFormList.forEach((likeForm)=> {
     likeForm.addEventListener('submit', (e)=> {
       e.preventDefault()
-      //console.log('확인!!!!!!')
-      // console.log(e.target.dataset)
       const reviewId = e.target.dataset.reviewId
       const requestUrl = `/community/${reviewId}/like/`
       const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value
