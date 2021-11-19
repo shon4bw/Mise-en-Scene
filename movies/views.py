@@ -28,7 +28,11 @@ def index(request):
     #     }
 
     #     return render(request, 'movies/index.html', context)
+
+
     
+
+    # TMDB data 뿌려주기
     for page in range(1, 6):
         API_KEY = 'be07aab38070bed23b07aa9d9da3e0e2'
         url = f'https://api.themoviedb.org/3/movie/top_rated?api_key={API_KEY}&language=ko-KR&page={page}&region=KR'

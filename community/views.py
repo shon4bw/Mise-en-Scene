@@ -6,6 +6,15 @@ from django.http import JsonResponse
 
 @require_GET
 def index(request):
+    # # 일반 로그인과 소셜 로그인 분리
+    # if request.user.is_authenticated:
+    #     user = User.objects.get(id=request.user.id)
+    #     try:
+    #         profile = User.objects.get(user_id=user.id)
+    #     except:
+    #         User.objects.create(user=user)
+
+    
     reviews = Review.objects.order_by('-pk')
     context = {
         'reviews': reviews,
