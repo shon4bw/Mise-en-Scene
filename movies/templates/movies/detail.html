@@ -8,8 +8,24 @@
   <p>관객수: {{ movie.popularity }}</p>
   <p>평점: {{ movie.vote_average }}</p>
   <p>줄거리: {{ movie.overview }}</p>
-  <a href="{% url 'movies:mybox'%}">My Box</a> 
+  <a data-movie-pk={{movie.pk}} class='box-form' href="{% url 'movies:create_my_box' movie.pk%} ">My Box</a> 
 
-  
 
 {% endblock %}
+{% block script %}
+<script>
+  const boxForm = document.querySelector('.box-form')
+  boxForm.addEventListener('click', (e)=> {
+ 
+    //console.log(e)
+    const moviePk = e.target.dataset.moviePk
+    boxForm.addEventListener('submit', (e) => {
+      e.preventDefault()
+      e.target.action = `/movies/${moviePk}/create_my_box/`
+      e.target.submit()
+    })
+  })
+
+</script>
+{% endblock %}
+
