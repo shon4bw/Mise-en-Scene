@@ -5,7 +5,9 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST, require_http_methods
-from .forms import CustomUserCreationForm
+
+from accounts.models import User
+from .forms import CustomUserCreationForm, CustomUserChangeForm
 from django.http import JsonResponse
 from community.models import Review
 
@@ -63,6 +65,28 @@ def profile(request, username):
         'articles': articles,
     }
     return render(request, 'accounts/profile.html', context)
+
+
+@login_required
+def update(request, user_pk):
+    '''
+    GET: "회원정보 수정 폼" 응답
+    POST: 수정된 회원정보 유효성 검사 후 저장
+    '''
+
+    user = User.objects.get(pk=user_pk)
+    
+    if request.method == 'POST':
+        form = CustomUserChangeForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('accounts:profile', user.username)
+    else:
+        form = CustomUserChangeForm(instance=user)
+    context = {
+        'form': form,
+    }
+    return render(request, 'accounts/update.html', context)
 
 
 @require_POST
