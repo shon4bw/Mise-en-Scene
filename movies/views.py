@@ -1,8 +1,8 @@
 from django.http.response import JsonResponse
 import requests
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_safe
-from .models import Movie, Genre
+from .models import Movie, Genre, Mybox
 from django.core.paginator import Paginator
 from django.core import serializers
 from django.http import HttpResponse
@@ -28,9 +28,6 @@ def index(request):
     #     }
 
     #     return render(request, 'movies/index.html', context)
-
-
-    
 
     # TMDB data 뿌려주기
     for page in range(1, 6):
@@ -117,21 +114,17 @@ def recommended(request):
     
     return render(request, 'movies/recommended.html', context)
 
-def mybox(request):
-    movies = Movie.objects.all()
-    paginator = Paginator(movies, 10)
-
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    # /movies/?page=2 ajax 요청 => json
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        data = serializers.serialize('json', page_obj)
-        return HttpResponse(data, content_type='application/json')
-    # /movies/ 첫번째 페이지 요청 => html
-    else:
+@require_safe
+def mybox(request, movie_pk):
+    if request.user.is_authenticated:
+        movie = get_object_or_404(Mybox, pk=movie_pk)
+        if movie.movies.filter(pk=request.user.pk).exists():
+            movie.movies.remove(request.user)
+        else:
+            movie.movies.add(request.user)
+        movie_count = movie.movies.count()
         context = {
-            'movies': page_obj,
+            'movie_count':movie_count,
         }
-
         return render(request, 'movies/mybox.html', context)
+
