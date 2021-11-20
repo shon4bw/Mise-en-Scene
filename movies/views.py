@@ -2,7 +2,7 @@ from django.http.response import JsonResponse
 import requests
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_safe
-from .models import Movie, Genre, Mybox
+from .models import Movie, Genre
 from django.core.paginator import Paginator
 from django.core import serializers
 from django.http import HttpResponse
@@ -115,16 +115,16 @@ def recommended(request):
     return render(request, 'movies/recommended.html', context)
 
 @require_safe
-def mybox(request, movie_pk):
-    if request.user.is_authenticated:
-        movie = get_object_or_404(Mybox, pk=movie_pk)
-        if movie.movies.filter(pk=request.user.pk).exists():
-            movie.movies.remove(request.user)
-        else:
-            movie.movies.add(request.user)
-        movie_count = movie.movies.count()
-        context = {
-            'movie_count':movie_count,
-        }
-        return render(request, 'movies/mybox.html', context)
+def mybox(request):
+    return render(request, 'movies/mybox.html')
 
+def create_my_box(request, movie_pk):
+    if request.user.is_authenticated:
+        movie = get_object_or_404(Movie, pk=movie_pk)
+        if request.user.like_movies.filter(pk=movie_pk).exists():
+            # 현재 사용자가 좋아하는 영화목록에 지금 추가한 영화가 있으면~
+            request.user.like_movies.remove(movie)
+        else:
+            request.user.like_movies.add(movie)
+
+        return redirect('movies:mybox')
