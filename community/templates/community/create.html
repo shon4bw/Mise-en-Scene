@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
+{% load bootstrap5 %}
 
 {% block content %}
-  <h1 class="text-center">CREATE</h1>
+<h1 class="text-center">CREATE</h1>
+<div>
   <form action="" method="POST">
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit">
+    {% bootstrap_form form %}
+    
+    <input class="btn btn-secondary" type="submit">
   </form>
   <hr>
   <a href="{% url 'community:index' %}">[back]</a>
+</div>
 {% endblock %}
