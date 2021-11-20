@@ -10,17 +10,39 @@
   <p>평점: {{ review.rank }}</p>
   <p>작성 시각: {{ review.created_at }}</p>
   <p>수정 시각: {{ review.updated_at }}</p>
+
+  {% if user == review.user %}
+  <a href="{% url 'community:update' review.pk %}">[UPDATE]</a>
+  <form action="{% url 'community:review_delete' review.pk %}" method="POST">
+    {% csrf_token %}
+    <button>삭제</button>
+  </form>
+  {% endif %}
   <hr>
-  <h4>댓글 목록</h4>
+
+  <h4>댓글</h4>
   {% if comments|length %}
     <p><b>{{ comments|length }}개의 댓글이 있습니다.</b></p>
   {% endif %}
+
   {% for comment in comments %}
-    <div>
-      {{ comment.user }} - {{ comment.content }}
-    </div>
+    <li>
+      <a href="{% url 'accounts:profile' comment.user.username %}" class="text-decoration-none text-light fw-bold">
+        {{ comment.user }}
+      </a>
+      {{ comment.content }} 
+
+      {% if request.user == comment.user %}
+      <form style="display: inline-block;" action="{% url 'community:comment_delete' review.pk comment.pk %}" method="POST">
+        {% csrf_token %}
+        <button>[X]</button>
+      </form>
+      {{ comment.updated_at }}
+      {% endif %}
+    </li>
+
   {% empty %}
-    <p><b>댓글이 없어요..</b></p>
+    <p><b>첫 댓글을 남겨주세요:)</b></p>
   {% endfor %}
   <hr>
   {% if request.user.is_authenticated %}
