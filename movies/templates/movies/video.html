@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load embed_video_tags %} 
+{% block content %}
+<div>
+  <div>
+    <p>{{ movie.title }}</p> 
+    <p>{{ movie.content }}</p> 
+    <div>
+      {% comment %} {% video movie.video as youtube %}
+      <iframe class="embed-responsive-item" src="{{ youtube.url }}" 
+        frameborder="0" allowfullscreen></iframe> 
+      {% endvideo %}  {% endcomment %}
+      {% for item in youtube_items %}
+      <iframe 
+        class="video-iframe"
+        src="https://www.youtube.com/embed/{{item.id}}" 
+        frameborder="0" 
+        allowfullscreen>
+      </iframe>
+      {% endfor %}
+    </div> 
+  </div> 
+</div> 
+
+{% endblock %}
+
