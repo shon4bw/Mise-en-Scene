@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'drf_yasg',
+    'embed_video',
 ]
 
 MIDDLEWARE = [
@@ -179,3 +180,5 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
+
+YOUTUBE_API_KEY = 'AIzaSyBK9jTxPfTujDLL1e2Z8Y__1dav6DlZ-wA'
