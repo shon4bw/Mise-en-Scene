@@ -5,7 +5,6 @@
   <form action="{% url 'community:update' review.pk %}" method="POST">
     {% csrf_token %}
     {{ form.as_p }}
-
     <input type="submit" value="수정">
   </form>
   <hr>

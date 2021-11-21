@@ -3,7 +3,8 @@
 {% block content %}
   <h2>My box</h2>
   {% for my_movie in request.user.like_movies.all %}
-    <img src="https://image.tmdb.org/t/p/w400{{ my_movie.poster_path }}" alt="poster">
-    
+    <a href="{% url 'movies:detail' my_movie.pk%}">
+      <img src="https://image.tmdb.org/t/p/w400{{ my_movie.poster_path }}" style="padding: 10px;"alt="poster" width="400px" height="500px">
+    </a>
   {% endfor %}
 {% endblock %}

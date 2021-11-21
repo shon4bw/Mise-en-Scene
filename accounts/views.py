@@ -10,6 +10,7 @@ from accounts.models import User
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 from django.http import JsonResponse
 from community.models import Review
+import os
 
 @require_http_methods(['GET', 'POST'])
 def signup(request):
@@ -111,3 +112,9 @@ def follow(request, user_pk):
                 'follower_count' : person.followers.count(),
             }
             return JsonResponse(context)
+
+def kakao_login(request):
+    app_key= os.environ.get("42a0571fe9d27ca9810a5e953a9f87fc")
+    redirect_uri = 'http://localhost:8000/accounts/kakao/login/callback/'
+    kakao_auth_api = 'https://kauth.kakao.com/oauth/authorize?response_type=code'
+    return redirect (f'{kakao_auth_api}&client_id={app_key}&redirect_uri={redirect_uri}')
