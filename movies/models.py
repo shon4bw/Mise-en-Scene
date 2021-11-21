@@ -19,13 +19,3 @@ class Movie(models.Model):
     def __str__(self):
         return self.title
 
-# class Mybox(models.Model):
-#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-#     movies = models.ManyToManyField(Movie, related_name='my_box_movie')
-#     title = models.CharField(max_length=100)
-#     poster_path = models.CharField(max_length=200)
-
-#     def __str__(self):
-#         return self.title
-
-

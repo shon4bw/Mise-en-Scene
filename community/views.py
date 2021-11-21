@@ -114,7 +114,6 @@ def like(request, review_pk):
     if request.user.is_authenticated:
         review = get_object_or_404(Review, pk=review_pk)
         if review.like_users.filter(pk=request.user.pk).exists():
-        # if request.user in article.like_users.all(): 
             # 좋아요 취소
             review.like_users.remove(request.user)
             liked = False
