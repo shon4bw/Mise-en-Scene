@@ -9,6 +9,8 @@
   <p>평점: {{ movie.vote_average }}</p>
   <p>줄거리: {{ movie.overview }}</p>
   <a data-movie-pk={{movie.pk}} class='box-form' href="{% url 'movies:create_my_box' movie.pk%} ">My Box</a> 
+  <a data-movie-pk={{movie.pk}} class='video' href="{% url 'movies:video' movie.pk%} ">재생</a> 
+
 
 
 {% endblock %}
@@ -22,6 +24,18 @@
     boxForm.addEventListener('submit', (e) => {
       e.preventDefault()
       e.target.action = `/movies/${moviePk}/create_my_box/`
+      e.target.submit()
+    })
+  })
+
+  const video = document.querySelector('.video')
+  boxForm.addEventListener('click', (e)=> {
+ 
+    //console.log(e)
+    const moviePk = e.target.dataset.moviePk
+    boxForm.addEventListener('submit', (e) => {
+      e.preventDefault()
+      e.target.action = `/movies/${moviePk}/video/`
       e.target.submit()
     })
   })

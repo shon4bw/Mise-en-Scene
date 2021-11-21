@@ -12,6 +12,7 @@ urlpatterns = [
     # mybox
     path('mybox/', views.mybox, name='mybox'),
     path('<int:movie_pk>/create_my_box/', views.create_my_box, name='create_my_box'),
+    path('<int:movie_pk>/video/', views.video, name='video'),
 
     
 ]

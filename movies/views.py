@@ -1,12 +1,13 @@
 from django.http.response import JsonResponse
-import requests
+import requests, random
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_safe
 from .models import Movie, Genre
 from django.core.paginator import Paginator
 from django.core import serializers
 from django.http import HttpResponse
-import random
+from django.conf import settings
+
 
 # Create your views here.
 @require_safe
@@ -128,3 +129,28 @@ def create_my_box(request, movie_pk):
             request.user.like_movies.add(movie)
 
         return redirect('movies:mybox')
+
+# 영상 재생
+def video(request, movie_pk):
+    if request.user.is_authenticated:
+        movie = get_object_or_404(Movie, pk=movie_pk)
+        # context = {
+        #     'movie' : movie,
+        # }
+        # return render(request, 'movies/video.html', context)
+        url = 'https://www.googleapis.com/youtube/v3/search'
+        params = {
+            'key': settings.YOUTUBE_API_KEY,
+            'part': 'snippet',
+            'type': 'video',
+            'maxResults': '3',
+            'q': '쇼생크탈출',
+        }
+        response = requests.get(url, params)
+        response_dict = response.json()
+
+        context = {
+            'movie': movie,
+            'youtube_items': response_dict['items']
+        }
+        return render(request, 'movies/video.html', context)

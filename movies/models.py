@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-
+from embed_video.fields import EmbedVideoField
 
 class Genre(models.Model):
     name = models.CharField(max_length=50)
@@ -14,6 +14,7 @@ class Movie(models.Model):
     overview = models.TextField()
     poster_path = models.CharField(max_length=200)
     genres = models.ManyToManyField(Genre)
+    # video = EmbedVideoField(null = True)
 
     def __str__(self):
         return self.title
@@ -26,3 +27,5 @@ class Movie(models.Model):
 
 #     def __str__(self):
 #         return self.title
+
+
