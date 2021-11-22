@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_GET, require_POST, require_http_methods
 from .models import Review, Comment
 from .forms import ReviewForm, CommentForm
+from django.core.paginator import Paginator
 
 @require_GET
 def index(request):
@@ -17,9 +18,15 @@ def index(request):
 
     
     reviews = Review.objects.order_by('-pk')
+
+    page = int(request.GET.get('p', 1)) #없으면 1로 지정
+    paginator = Paginator(reviews, 10) #한 페이지 당 몇개 씩 보여줄 지 지정 
+    
+    boards = paginator.get_page(page)
     context = {
-        'reviews': reviews,
+        'reviews': boards,
     }
+
     return render(request, 'community/index.html', context)
 
 
