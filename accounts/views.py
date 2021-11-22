@@ -10,6 +10,8 @@ from accounts.models import User
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 from django.http import JsonResponse
 from community.models import Review
+from django.core.paginator import Paginator
+
 import os
 
 @require_http_methods(['GET', 'POST'])
@@ -60,10 +62,15 @@ def profile(request, username):
     person = get_object_or_404(get_user_model(), username=username)
     is_following = person.followings.filter(pk=request.user.pk).exists()
     articles = Review.objects.filter(user_id=person.id).order_by('-pk')
+
+    page = int(request.GET.get('p', 1)) #없으면 1로 지정
+    paginator = Paginator(articles, 5) #한 페이지 당 몇개 씩 보여줄 지 지정 
+    boards = paginator.get_page(page)
+
     context = {
         'person': person,
         'is_following': is_following,
-        'articles': articles,
+        'articles': boards,
     }
     return render(request, 'accounts/profile.html', context)
 
@@ -118,3 +125,5 @@ def kakao_login(request):
     redirect_uri = 'http://localhost:8000/accounts/kakao/login/callback/'
     kakao_auth_api = 'https://kauth.kakao.com/oauth/authorize?response_type=code'
     return redirect (f'{kakao_auth_api}&client_id={app_key}&redirect_uri={redirect_uri}')
+
+
