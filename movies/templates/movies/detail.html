@@ -8,6 +8,7 @@
   <p>관객수: {{ movie.popularity }}</p>
   <p>평점: {{ movie.vote_average }}</p>
   <p>줄거리: {{ movie.overview }}</p>
+  <p>장르:  {{ movie.genres.value }}</p>
 
   <form data-movie-pk="{{movie.pk}}" class='box-form' method="POST">
     {% csrf_token %}

@@ -12,31 +12,22 @@ from django.conf import settings
 
 
 # Create your views here.
-@require_safe
-def index(request):
-    # movies = Movie.objects.all() -<- 여기서 할 건 이것뿐! TBDM API 주기적으로 가져오기 다른 함수에서!
-    # best -> 매일 새벽 3시에 자동으로 불러오기.....
-    # paginator = Paginator(movies, 10)
+def fetch_movies(request):
+    API_KEY = 'be07aab38070bed23b07aa9d9da3e0e2'
+    TMDB_URL = 'https://api.themoviedb.org/3/'
 
-    # page_number = request.GET.get('page')
-    # page_obj = paginator.get_page(page_number)
+    genres = requests.get(TMDB_URL + 'genre/movie/list' + f'?api_key={API_KEY}' + '&language=ko-kr').json().get('genres')
+    for genre in genres:
+        context = {
+            'genre_id': genre['id'],
+            'name': genre['name']
+        }
+        genre, created = Genre.objects.get_or_create(**context)
 
-    # # /movies/?page=2 ajax 요청 => json
-    # if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-    #     data = serializers.serialize('json', page_obj)
-    #     return HttpResponse(data, content_type='application/json')
-    # # /movies/ 첫번째 페이지 요청 => html
-    # else:
-    #     context = {
-    #         'movies': page_obj,
-    #     }
-
-    #     return render(request, 'movies/index.html', context)
-
-    # TMDB data 뿌려주기
     for page in range(1, 6):
-        API_KEY = 'be07aab38070bed23b07aa9d9da3e0e2'
-        url = f'https://api.themoviedb.org/3/movie/top_rated?api_key={API_KEY}&language=ko-KR&page={page}&region=KR'
+        
+        url = f'{TMDB_URL}movie/top_rated?api_key={API_KEY}&language=ko-KR&page={page}&region=KR'
+        # url = f'https://api.themoviedb.org/3/movie/top_rated?api_key={API_KEY}&language=ko-KR&page={page}&region=KR'
         movie_dict = requests.get(url).json()
         movies = movie_dict.get('results')
         for movie in movies:
@@ -51,13 +42,28 @@ def index(request):
                 "poster_path": movie.get('poster_path'),
             }
             movie = Movie.objects.create(**context)
-            genre, created = Genre.objects.get_or_create(name='genre_id')
-            genre.value = request.POST.get('genre_id')
-            genre.save()
-            movie.genres.add(genre)
-        movies = Movie.objects.all()
-        for movie in movies:
-            movie.genres.all()
+            
+            for genre_id in movie['genre_ids']:
+                genre = Genre.objects.get(genre_id=genre_id)
+                movie.genres.add(genre)
+            movie_id = movie.movie_id
+            
+            # genre, created = Genre.objects.get_or_create(name='genre_id')
+            # genre.value = request.POST.get('genre_id')
+            # genre.save()
+            # movie.genres.add(genre)
+
+@require_safe
+def index(request):
+    # movies = Movie.objects.all() -<- 여기서 할 건 이것뿐! TBDM API 주기적으로 가져오기 다른 함수에서!
+    # best -> 매일 새벽 3시에 자동으로 불러오기.....
+    
+
+    # 데이터 셋 불러오기 (db 초기화시에만 주석 풀 것)
+    # fetch_movies(request)
+
+
+    movies = Movie.objects.all()
     context = {
         'movies' : movies
     }
