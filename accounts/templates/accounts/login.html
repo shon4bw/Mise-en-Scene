@@ -5,7 +5,7 @@
 {% block content %}
 <div class="login" style="padding: 20px 300px;">
   <h1>로그인</h1>
-  <form action="" method="POST">
+  <form action="" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {% bootstrap_form form %}
     <input type="submit">

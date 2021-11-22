@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+{% load socialaccount %}
+
+{% block content %}
+<div class="login" style="padding: 20px 300px;">
+  <h1>안전하게</h1>
+  <h1>로그아웃되었습니다!</h1>
+  <div>무궁무진한 Scène들이 당신을 기다립니다.</div>
+  <div>See ya-!</div>
+  <br>
+  <a class="btn btn-primary" href="{% url 'accounts:login' %}" role="button">다시 돌아가기</a>
+</div>
+{% endblock  %}

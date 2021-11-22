@@ -158,37 +158,37 @@ AUTHENTICATION_BACKENDS = [
 
 SITE_ID = 1
 
-# SOCIALACCOUNT_PROVIDERS = {
-#     'google': {
-#         # For each OAuth based provider, either add a ``SocialApp``
-#         # (``socialaccount`` app) containing the required client
-#         # credentials, or list them here:
-#         'APP': {
-#             'client_id': '721423814731-dfmmej44kts0f1nlo6lftr7tdaducbqq.apps.googleusercontent.com',
-#             'secret': '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',
-#             'key': ''
-#         }
-#     },
-#     'naver': {
-#         # For each OAuth based provider, either add a ``SocialApp``
-#         # (``socialaccount`` app) containing the required client
-#         # credentials, or list them here:
-#         'APP': {
-#             'client_id': '3lYQktTT1ACVGf9wMXUY',
-#             'secret': 'dhj4_yRvCL',
-#             'key': ''
-#         }
-#     },
-#     'Kakao': {
-#         # For each OAuth based provider, either add a ``SocialApp``
-#         # (``socialaccount`` app) containing the required client
-#         # credentials, or list them here:
-#         'APP': {
-#             'client_id': '42a0571fe9d27ca9810a5e953a9f87fc',
-#             'secret': '',
-#             'key': ''
-#         }
-#     }
-# }
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        'APP': {
+            'client_id': '721423814731-dfmmej44kts0f1nlo6lftr7tdaducbqq.apps.googleusercontent.com',
+            'secret': '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',
+            'key': ''
+        }
+    },
+    'naver': {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        'APP': {
+            'client_id': '3lYQktTT1ACVGf9wMXUY',
+            'secret': 'dhj4_yRvCL',
+            'key': ''
+        }
+    },
+    'Kakao': {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        'APP': {
+            'client_id': '42a0571fe9d27ca9810a5e953a9f87fc',
+            'secret': '',
+            'key': ''
+        }
+    }
+}
 
 YOUTUBE_API_KEY = 'AIzaSyBK9jTxPfTujDLL1e2Z8Y__1dav6DlZ-wA'
