@@ -8,39 +8,86 @@
   <p>관객수: {{ movie.popularity }}</p>
   <p>평점: {{ movie.vote_average }}</p>
   <p>줄거리: {{ movie.overview }}</p>
-  <a data-movie-pk={{movie.pk}} class='box-form' href="{% url 'movies:create_my_box' movie.pk%} ">My Box</a> 
+
+  <form data-movie-pk="{{movie.pk}}" class='box-form' method="POST">
+    {% csrf_token %}
+      {% if movie in user.like_movies.all %}
+        <div>
+          <button id="boxBtn-{{ movie.pk }}" class="btn btn-link link-danger p-0 mx-2" >
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-cart-x" viewBox="0 0 16 16">
+              <path d="M7.354 5.646a.5.5 0 1 0-.708.708L7.793 7.5 6.646 8.646a.5.5 0 1 0 .708.708L8.5 8.207l1.146 1.147a.5.5 0 0 0 .708-.708L9.207 7.5l1.147-1.146a.5.5 0 0 0-.708-.708L8.5 6.793 7.354 5.646z"/>
+              <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zm3.915 10L3.102 4h10.796l-1.313 7h-8.17zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+            </svg>
+          </button>
+        </div>
+      {% else %}
+        <div>
+          <button id="boxBtn-{{ movie.pk }}" style="display: inline-block;" class="btn btn-link link-danger p-0 mx-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-cart-plus-fill" viewBox="0 0 16 16">
+              <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0z"/>
+            </svg>
+          </button>
+        </div>
+      {% endif %}
+  </form>
 
   <a data-movie-pk={{movie.pk}} class='video' href="{% url 'movies:video' movie.pk%} ">재생</a> 
-
-
 
 
 {% endblock %}
 {% block script %}
 <script>
-  const boxForm = document.querySelector('.box-form')
-  boxForm.addEventListener('click', (e)=> {
-    //console.log(e)
+const boxFormList = document.querySelectorAll('.box-form')
+//console.log(boxFormList)
+boxFormList.forEach((boxForm)=> {
+  boxForm.addEventListener('submit', (e)=> {
+    e.preventDefault()
+    
     const moviePk = e.target.dataset.moviePk
-    boxForm.addEventListener('submit', (e) => {
-      e.preventDefault()
-      e.target.action = `/movies/${moviePk}/create_my_box/`
-      e.target.submit()
-    })
+    const requestUrl = `/movies/${moviePk}/create_my_box/`
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value
+
+    axios.post(requestUrl, {}, {headers: {'X-CSRFToken': csrfToken}})
+      .then((res) => {
+        const chosen = res.data.chosen
+        const boxBtn = document.querySelector(`#boxBtn-${moviePk}`)
+        boxBtn.value = chosen ? '담기 취소' : '담기'
+        if (chosen) {
+          // 담기 눌렀을 때 -> x 표시된 장바구니
+        //console.log('check')
+          boxBtn.innerHTML = 
+            `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-cart-x" viewBox="0 0 16 16">
+              <path d="M7.354 5.646a.5.5 0 1 0-.708.708L7.793 7.5 6.646 8.646a.5.5 0 1 0 .708.708L8.5 8.207l1.146 1.147a.5.5 0 0 0 .708-.708L9.207 7.5l1.147-1.146a.5.5 0 0 0-.708-.708L8.5 6.793 7.354 5.646z"/>
+              <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zm3.915 10L3.102 4h10.796l-1.313 7h-8.17zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+            </svg>`
+          
+          const confirmed = confirm('My Box에 추가되었습니다. 이동하시겠습니까?')
+          if (confirmed) {
+            window.location.href = '/movies/mybox/'
+          }
+        } else {
+          boxBtn.innerHTML = 
+            `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-cart-plus-fill" viewBox="0 0 16 16">
+              <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0z"/>
+            </svg>`
+        }
+      })
+      .catch((err)=> {
+        window.alert(err)
+      })
   })
+})
 
 
-  const video = document.querySelector('.video')
-  boxForm.addEventListener('click', (e)=> {
- 
-    //console.log(e)
-    const moviePk = e.target.dataset.moviePk
-    boxForm.addEventListener('submit', (e) => {
-      e.preventDefault()
-      e.target.action = `/movies/${moviePk}/video/`
-      e.target.submit()
-    })
+const video = document.querySelector('.video')
+boxForm.addEventListener('click', (e)=> {
+  const moviePk = e.target.dataset.moviePk
+  boxForm.addEventListener('submit', (e) => {
+    e.preventDefault()
+    e.target.action = `/movies/${moviePk}/video/`
+    e.target.submit()
   })
+}) 
 
 
 </script>

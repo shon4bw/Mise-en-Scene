@@ -52,7 +52,7 @@ def login(request):
 @require_POST
 def logout(request):
     auth_logout(request)
-    return redirect('community:index')
+    return render(request, 'accounts/logout.html')
 
 
 @login_required
@@ -78,7 +78,7 @@ def update(request, user_pk):
     user = User.objects.get(pk=user_pk)
     
     if request.method == 'POST':
-        form = CustomUserChangeForm(request.POST, instance=user)
+        form = CustomUserChangeForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()
             return redirect('accounts:profile', user.username)

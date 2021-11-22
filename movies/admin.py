@@ -9,6 +9,6 @@ from embed_video.admin import AdminVideoMixin
 # class MovieAdmin(AdminVideoMixin, admin.ModelAdmin):
 #     list_display = ('title', 'video')
 
-# admin.site.register(Movie, MovieAdmin)
+# admin.site.register(MovieAdmin)
 admin.site.register(Genre)
 admin.site.register(Movie)

@@ -1,7 +1,9 @@
+from django.http import response
 from django.http.response import JsonResponse
 import requests, random
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.decorators.http import require_safe
+from django.views.decorators.http import require_safe, require_POST
+from django.contrib.auth.decorators import login_required
 from .models import Movie, Genre
 from django.core.paginator import Paginator
 from django.core import serializers
@@ -12,7 +14,8 @@ from django.conf import settings
 # Create your views here.
 @require_safe
 def index(request):
-    # movies = Movie.objects.all()
+    # movies = Movie.objects.all() -<- 여기서 할 건 이것뿐! TBDM API 주기적으로 가져오기 다른 함수에서!
+    # best -> 매일 새벽 3시에 자동으로 불러오기.....
     # paginator = Paginator(movies, 10)
 
     # page_number = request.GET.get('page')
@@ -66,6 +69,7 @@ def detail(request, movie_pk):
     movie = get_object_or_404(Movie, pk=movie_pk)
     context = {
         'movie' : movie,
+        
     }
     return render(request, 'movies/detail.html', context)
 
@@ -115,42 +119,50 @@ def recommended(request):
     
     return render(request, 'movies/recommended.html', context)
 
+@login_required
 @require_safe
 def mybox(request):
     return render(request, 'movies/mybox.html')
 
+@login_required
+@require_POST
 def create_my_box(request, movie_pk):
     if request.user.is_authenticated:
         movie = get_object_or_404(Movie, pk=movie_pk)
         if request.user.like_movies.filter(pk=movie_pk).exists():
             # 현재 사용자가 좋아하는 영화목록에 지금 추가한 영화가 있으면~
             request.user.like_movies.remove(movie)
+            chosen = False 
         else:
             request.user.like_movies.add(movie)
-
-        return redirect('movies:mybox')
+            chosen = True 
+        context = {
+            'chosen' : chosen,
+        }
+        
+        return JsonResponse(context)
 
 # 영상 재생
+@login_required
 def video(request, movie_pk):
     if request.user.is_authenticated:
         movie = get_object_or_404(Movie, pk=movie_pk)
-        # context = {
-        #     'movie' : movie,
-        # }
-        # return render(request, 'movies/video.html', context)
+        inputvalue = movie.title+'trailer'
+
         url = 'https://www.googleapis.com/youtube/v3/search'
         params = {
             'key': settings.YOUTUBE_API_KEY,
             'part': 'snippet',
             'type': 'video',
-            'maxResults': '3',
-            'q': '쇼생크탈출',
+            'maxResults': '1',
+            'q': inputvalue,
         }
         response = requests.get(url, params)
         response_dict = response.json()
 
         context = {
             'movie': movie,
+            'response_dict': response_dict,
             'youtube_items': response_dict['items']
         }
         return render(request, 'movies/video.html', context)
