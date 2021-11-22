@@ -56,15 +56,100 @@
 <h5>
   <span class="user_name_txt">{{ person.username }}</span>님의 Scène
 </h5>
+
 {% comment %} {% if request.user == person.pk %} {% endcomment %}
-  {% for review in reviews %}
-    <p>{{ review.title }}</p>
-    <p>{{ review.content }}</p>
-  {% endfor %} 
+
+<table class="table">
+  <style>    
+table, th, td {    
+text-align: center;  
+}    
+</style> 
+  <thead>
+    <tr>
+      <th>No.</th>
+      <th>글 제목</th>
+      <th>좋아요 수</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for article in articles %}
+      <tr>
+        <td>{{ article.pk }}</td>
+        <td><a href="{% url 'community:detail' article.pk %}">{{ article.title }}</a></td>
+        <td>{{article.like_users.count}}</td>
+      </tr>
+  {% endfor %}
+  </tbody> 
+
+</table>
+<div class="row mt-2">
+        <div class="col-12">
+            <nav>
+                <ul class="pagination justify-content-center">
+                    {% if articles.has_previous %}                         
+                    <li class="page-item">
+                        <a class="page-link" href="?p={{articles.previous_page_number }}"><</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#"><</a>
+                    </li>
+                    {% endif %}
+                    {% for page_number in articles.paginator.page_range %}
+                    {% if page_number == articles.number %}
+                    <li class="page-item active" aria-current="page">
+                    <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item">
+                    <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+
+                    {% if articles.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?p={{articles.next_page_number }}">></a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">></a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+<!--
+  {% for article in articles %}
+    {% comment %} <p>작성자 : <a href="{% url 'accounts:profile' article.user.username %}">{{ article.user }}</a></p> {% endcomment %}
+    <p>글 번호: {{ article.pk }}</p>
+    <p>글 내용: {{ article.content }}</p>
+    {% comment %} <div>
+      <span id="likeCnt-{{ article.pk }}">
+        {{article.like_users.count}}명이 좋답니다!
+      </span>
+
+      <form data-review-id="{{ article.pk }}" class="like-form" method="POST">
+        {% csrf_token %}
+        {% if user in article.like_users.all %}
+          <input type="submit" id="likeBtn-{{ article.pk }}" value="좋아요 취소">
+        {% else %}
+          <input type="submit" id="likeBtn-{{ article.pk }}" value="좋아요">
+        {% endif %}
+      </form>
+    </div> {% endcomment %}
+    <a href="{% url 'community:detail' article.pk %}">{{ article.title }}</a>
+    <hr>
+  {% endfor %}
+  -->
 {% comment %} {% endif %} {% endcomment %}
 
 
 {% endblock content %}
+
+
 {% block script %}
 <script>
   const followForm = document.querySelector('#follow-form')
