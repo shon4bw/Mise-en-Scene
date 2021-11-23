@@ -68,9 +68,9 @@
     </div>
 
 
-  {% for review in reviews %}
+  {% comment %} {% for review in reviews %}
     <div>
-    <!--
+
       <span id="likeCnt-{{ review.pk }}">
         {{review.like_users.count}}명이 좋답니다!
       </span>
@@ -87,8 +87,8 @@
     </div>
     <a href="{% url 'community:detail' review.pk %}">[detail]</a>
     <hr>
-  {% endfor %}
-  -->
+  {% endfor %} {% endcomment %}
+
 
 {% endblock %}
 
