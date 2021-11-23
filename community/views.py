@@ -5,6 +5,7 @@ from django.views.decorators.http import require_GET, require_POST, require_http
 from .models import Review, Comment
 from .forms import ReviewForm, CommentForm
 from django.core.paginator import Paginator
+from accounts.models import User
 
 @require_GET
 def index(request):
@@ -135,3 +136,26 @@ def like(request, review_pk):
             'like_count' : like_count,
         }
         return JsonResponse(context)
+
+# def search(request):
+#     users = User.objects.all()
+#     reviews = Review.objects.order_by('-pk')
+#     q = request.POST.get('q', "")
+
+#     if q[0] == '#':
+#         reviews = reviews.filter(content__contains=q[1:])
+#         context = {
+#             'reviews': reviews,
+#             'q': q,
+#         }
+#         return render(request, 'community/search.html', context)
+#     elif q:
+#         users = users.filter(username__icontains=q)
+#         context = {
+#             'users': users,
+#             'q': q,
+#         }
+#         return render(request, 'community/search.html', context)
+#     else:
+#         return render(request, 'community/search.html')
+

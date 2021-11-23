@@ -17,6 +17,11 @@
       {% endfor %}
     </div> 
   </div> 
+  
+  <form action="{% url 'movies:pay' movie.pk %}" method="post">
+    {% csrf_token %}
+    <button class="btn btn-warning">카카오페이로 결제하기</button>
+  </form>
 </div> 
 
 {% endblock %}
