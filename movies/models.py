@@ -4,6 +4,7 @@ from embed_video.fields import EmbedVideoField
 
 class Genre(models.Model):
     name = models.CharField(max_length=50)
+    genre_id = models.CharField(max_length=50)
 
 class Movie(models.Model):
     title = models.CharField(max_length=100)
