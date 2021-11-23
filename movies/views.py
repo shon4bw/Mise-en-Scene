@@ -61,11 +61,12 @@ def index(request):
 
     # 데이터 셋 불러오기 (db 초기화시에만 주석 풀 것)
     # fetch_movies(request)
-
-
-    movies = Movie.objects.all()
+    import json
+    f = open('./movies/fixtures/movies.json')
+    data = json.load(f)
+    
     context = {
-        'movies' : movies
+        'movies' : data
     }
     return render(request, 'movies/index.html', context)
 
