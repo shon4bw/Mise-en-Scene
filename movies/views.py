@@ -15,10 +15,6 @@ from django.conf import settings
 # 데이터 패치(가져오기)
 def fetch_movies(request):
 
-
-
-
-
     API_KEY = 'be07aab38070bed23b07aa9d9da3e0e2'
     TMDB_URL = 'https://api.themoviedb.org/3/'
 
@@ -89,18 +85,18 @@ def detail(request, movie_pk):
 @require_safe
 def recommended(request):
     user = request.user
-    # 선우가 좋아하는 리뷰 목록
-    user_like_reviews = user.like_reviews.all()
+    
+    user_like_movies = user.like_movies.all()
     # 리뷰목록을 하나씩 돌면서
-    # 각 리뷰의 장르 번호만 빼올 것
+    # 각 무비의 장르 번호만 빼올 것
 
-    # 각 리뷰의 영화 타이틀 가지고 오기
+    # 영화 타이틀 가지고 오기
     movie_titles= []
-    for review in user_like_reviews :
-        movie_titles.append(review.movie_title) # community model
+    for like_movie in user_like_movies :
+        movie_titles.append(like_movie.movie_title) # community model
 
     # 전체 영화 정보를 돌면서
-    # 선우가 좋아하는 영화 타이틀의 장르 번호를 가져온다
+    # 좋아하는 영화 타이틀의 장르 번호를 가져온다
     genre_nums = []
     for movie_title in movie_titles:
         genre_num_list = Movie.objects.filter(title=movie_title).values('genres')
@@ -129,12 +125,54 @@ def recommended(request):
         'random_movies': random_movies
     }
     
-    return render(request, 'movies/recommended.html', context)
+    return render(request, 'movies/mybox.html', context)
+
 
 @login_required
 @require_safe
 def mybox(request):
-    return render(request, 'movies/mybox.html')
+    user = request.user
+    
+    user_like_movies = user.like_movies.all()
+    # 리뷰목록을 하나씩 돌면서
+    # 각 무비의 장르 번호만 빼올 것
+
+    # 영화 타이틀 가지고 오기
+    movie_titles= []
+    for like_movie in user_like_movies :
+        movie_titles.append(like_movie.title) # community model
+
+    # 전체 영화 정보를 돌면서
+    # 좋아하는 영화 타이틀의 장르 번호를 가져온다
+    genre_nums = []
+    for movie_title in movie_titles:
+        genre_num_list = Movie.objects.filter(title=movie_title).values('genres')
+        for genre_num in genre_num_list:
+            genre_nums.append(genre_num['genres'])
+            # ['기생충', '대부 2', '너의 이름은.'] [18, 35, 53, 18, 80, 16, 18, 10749]
+
+    # 각 장르 번호를 세줘서 가장 많이 등장하는 장르 뽑기
+    genre_nums_set = list(set(genre_nums))
+    max_genre_num = genre_nums_set[0]
+    max_genre_num_cnt = genre_nums_set.count(max_genre_num)
+    for genre_num in genre_nums_set: 
+        if genre_nums.count(genre_num) > max_genre_num_cnt :
+            max_genre_num = genre_num
+            max_genre_num_cnt = genre_nums.count(genre_num)
+            # 18 뽑음
+    
+    recommended_movies = []
+    for movie in Movie.objects.all():
+        if movie.genres.filter(pk=max_genre_num).exists() :
+            recommended_movies.append(movie)
+
+    random_movies = random.sample(recommended_movies, 10)
+
+    context = {
+        'random_movies': random_movies
+    }
+    
+    return render(request, 'movies/mybox.html', context)
 
 @login_required
 @require_POST
