@@ -15,7 +15,11 @@ urlpatterns = [
     # video
     path('<int:movie_pk>/video/', views.video, name='video'),
     # pay
-    path('pay/', views.pay, name='pay'),
+    path('<int:movie_pk>/pay/', views.pay, name='pay'),
+    path('<int:movie_pk>/approval/', views.approval, name='approval'),
+
+    path('search/', views.search, name='search'),
+
 
 ]
 
