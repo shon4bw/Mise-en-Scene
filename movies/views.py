@@ -12,7 +12,13 @@ from django.conf import settings
 
 
 # Create your views here.
+# 데이터 패치(가져오기)
 def fetch_movies(request):
+
+
+
+
+
     API_KEY = 'be07aab38070bed23b07aa9d9da3e0e2'
     TMDB_URL = 'https://api.themoviedb.org/3/'
 
@@ -41,12 +47,12 @@ def fetch_movies(request):
                 "overview": movie.get('overview'),
                 "poster_path": movie.get('poster_path'),
             }
-            movie = Movie.objects.create(**context)
+            
+            new_movie = Movie.objects.create(**context)
             
             for genre_id in movie['genre_ids']:
                 genre = Genre.objects.get(genre_id=genre_id)
-                movie.genres.add(genre)
-            movie_id = movie.movie_id
+                new_movie.genres.add(genre)
             
             # genre, created = Genre.objects.get_or_create(name='genre_id')
             # genre.value = request.POST.get('genre_id')

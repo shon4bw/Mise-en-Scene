@@ -8,6 +8,11 @@
   <p>관객수: {{ movie.popularity }}</p>
   <p>평점: {{ movie.vote_average }}</p>
   <p>줄거리: {{ movie.overview }}</p>
+  <p>장르: 
+    {% for genre in movie.genres.all %}
+      {{ genre.name }}
+    {% endfor %}
+  </p>
   
   {% if user.is_authenticated %}
     <form data-movie-pk="{{movie.pk}}" class='box-form' method="POST">
