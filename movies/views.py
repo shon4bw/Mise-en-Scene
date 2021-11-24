@@ -232,7 +232,7 @@ def pay(request, movie_pk):
             "partner_user_id": "sunwoo",    # 유저 아이디
             "item_name": "기생충",        # 구매 물품 이름
             "quantity": "1",                # 구매 물품 수량
-            "total_amount": "1",        # 구매 물품 가격 - 시연하기 전 금액 늘려야 함 ㅎㅎ
+            "total_amount": "12000",        # 구매 물품 가격 - 시연하기 전 금액 늘려야 함 ㅎㅎ
             "tax_free_amount": "0",         # 구매 물품 비과세
             "approval_url": f"http://localhost:8000/movies/{movie_pk}/approval/",
             "cancel_url": "http://localhost:8000/movies/",
