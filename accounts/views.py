@@ -6,11 +6,15 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST, require_http_methods
 
+
 from accounts.models import User
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 from django.http import JsonResponse
 from community.models import Review
 from django.core.paginator import Paginator
+from django.contrib.auth.forms import AuthenticationForm
+
+
 
 import os
 
@@ -25,10 +29,15 @@ def signup(request):
             user = form.save()
             auth_login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             return redirect('community:index')
+
     else:
         form = CustomUserCreationForm()
+        form1 = AuthenticationForm()
+        
     context = {
         'form': form,
+        'form1':form1
+        
     }
     return render(request, 'accounts/signup.html', context)
 
@@ -37,12 +46,12 @@ def signup(request):
 def login(request):
     if request.user.is_authenticated:
         return redirect('movies:index')
-
     if request.method == 'POST':
         form = AuthenticationForm(request, request.POST)
         if form.is_valid():
             auth_login(request, form.get_user())
             return redirect(request.GET.get('next') or 'movies:index')
+    
     else:
         form = AuthenticationForm()
     context = {
@@ -54,7 +63,11 @@ def login(request):
 @require_POST
 def logout(request):
     auth_logout(request)
-    return render(request, 'accounts/logout.html')
+    form = AuthenticationForm()
+    context = {
+        'form': form,
+    }
+    return render(request, 'accounts/logout.html', context)
 
 
 @login_required
@@ -71,6 +84,7 @@ def profile(request, username):
         'person': person,
         'is_following': is_following,
         'articles': boards,
+
     }
     return render(request, 'accounts/profile.html', context)
 
@@ -91,6 +105,7 @@ def update(request, user_pk):
             return redirect('accounts:profile', user.username)
     else:
         form = CustomUserChangeForm(instance=user)
+
     context = {
         'form': form,
     }
