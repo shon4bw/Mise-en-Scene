@@ -8,9 +8,13 @@
   <form action="" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {% bootstrap_form form %}
-    <input type="submit">
+    <div class="d-grid gap-2">
+      <button class="mes-btn mes-btn-indigo text-decoration-none" type="submit" role="button">
+        로그인
+      </button>
+    </div>
   </form>
-  <p>또는</p>
+  <br>
   <a href="{% provider_login_url "google" next="/movies/" %}">Google 계정으로 계속하기</a>
   <a href="{% provider_login_url "naver" next="/movies/" %}">NAVER 계정으로 계속하기</a>
   <a href="{% provider_login_url "kakao" next="/movies/" %}">Kakao 계정으로 계속하기</a>

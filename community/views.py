@@ -7,6 +7,7 @@ from .forms import ReviewForm, CommentForm
 from django.core.paginator import Paginator
 from accounts.models import User
 
+@login_required
 @require_GET
 def index(request):
     # # 일반 로그인과 소셜 로그인 분리
@@ -31,6 +32,7 @@ def index(request):
     return render(request, 'community/index.html', context)
 
 
+@login_required
 @require_http_methods(['GET', 'POST'])
 def create(request):
     if request.method == 'POST':
@@ -48,6 +50,7 @@ def create(request):
     return render(request, 'community/create.html', context)
 
 
+@login_required
 @require_GET
 def detail(request, review_pk):
     review = get_object_or_404(Review, pk=review_pk)
