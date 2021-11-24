@@ -1,9 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>Movies</h1>
+  <header class="text-center m-5">
+    <h1 class="fw-bold" style="color:#60A5FA;">Mise en Scène</h1>
+    <h5>당신의 taste를 찾아보세요!</h5>
+  </header>
 
-  <div class="movie-list slider-for">
+
+  <div class="movie-list slider-for m-5">
     {% for movie in movies %}
       <div class="movie">
         <a href="{% url 'movies:detail' movie.pk%}">
@@ -12,6 +16,18 @@
       </div>
     {% endfor %}
   </div>
+  {% if user.is_authenticated %}
+    
+  {% else %}
+    <div class="text-center">
+      <h4 class="m-3">당신의 박스에 취향저격 영화들을 담아보세요</h4>
+      <h6 class="m-3">자유롭게, 추천을 통해 풍성한 영화 시청의 기회를 놓치지 마세요</h6>
+    </div>
+    <div class="d-grid gap-2 col-6 mx-auto text-center">
+      <a class="btn btn-outline-success" href="{% url 'accounts:login' %}">Share Your Taste Now!</a>
+    </div>
+  {% endif %}
+
 {% endblock %}
 
 {% block script %}

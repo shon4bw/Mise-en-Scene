@@ -20,11 +20,9 @@
     <div class="col-9">
       <span class="user_name_txt">{{ person.username }}</span>
       {% if user.is_authenticated %}
-        <button>
-          <a href="{% url 'accounts:update' request.user.pk %}">
-            <span>프로필 편집</span>
-          </a>
-        </button>
+        <a class="m-3 align-end mes-btn mes-btn-wb text-decoration-none" href="{% url 'accounts:update' request.user.pk %}">
+          프로필 편집
+        </a>
       {% endif %}
 
       {% with followings=person.followings.all followers=person.followers.all %}
@@ -76,7 +74,7 @@ text-align: center;
   {% for article in articles %}
       <tr>
         <td>{{ article.pk }}</td>
-        <td><a href="{% url 'community:detail' article.pk %}">{{ article.title }}</a></td>
+        <td><a class="text-decoration-none txt-white" href="{% url 'community:detail' article.pk %}">{{ article.title }}</a></td>
         <td>{{article.like_users.count}}</td>
       </tr>
   {% endfor %}

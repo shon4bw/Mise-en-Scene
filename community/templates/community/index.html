@@ -2,7 +2,7 @@
 
 {% block content %}
   <h1 style="display: inline-block;" >Community</h1>
-  <a href="{% url 'community:create'%}">New Review</a>
+    <a class="mes-btn mes-btn-primary text-decoration-none" href="{% url 'community:create'%}">New Review</a>
   <hr>
 
   <table class="table">
@@ -24,8 +24,8 @@
     <tbody>
     {% for review in reviews %}
       <tr>
-        <td><a class="text-decoration-none" href="{% url 'accounts:profile' review.user %}">{{ review.user }}</a></td>
-        <td><a class="text-decoration-none" href="{% url 'community:detail' review.pk %}">{{ review.title }}</a></th>
+        <td><a class="text-decoration-none txt-white" href="{% url 'accounts:profile' review.user %}">{{ review.user }}</a></td>
+        <td><a class="text-decoration-none txt-white" href="{% url 'community:detail' review.pk %}">{{ review.title }}</a></th>
         <td>
           <div class="d-flex align-items-center"> 
             <form data-review-id="{{ review.pk }}" class="like-form" method="POST">
@@ -54,7 +54,7 @@
           </div>
         </td>
         <td>{{review.updated_at}}</td>
-        <td><a href="{% url 'community:detail' review.pk %}">[detail]</a></td>
+        <td><a class="text-decoration-none txt-white" href="{% url 'community:detail' review.pk %}">[detail]</a></td>
       </tr>
     {% endfor %}
     </tbody> 

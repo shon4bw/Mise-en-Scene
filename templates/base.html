@@ -13,6 +13,9 @@
   {% include '_style.html' %}
 
   <nav class="navbar justify-content-evenly py-2">
+    <a class="navbar-brand align-self-start" href="{% url 'movies:index'%}">
+      <img src="miseenscene.JPG" alt="Logo Image">
+    </a>
     {% if user.is_authenticated %}
       <ul class="d-flex flex-row align-items-center list-unstyled my-0">
         <li class="mx-2">
@@ -69,10 +72,10 @@
     {% else %}
       <ul class="d-flex flex-row align-items-center list-unstyled my-0">
         <li class="mx-2">
-          <a href="{% url 'accounts:signup' %}">Signup</a>
+          <a class="mes-btn mes-btn-wb text-decoration-none" href="{% url 'accounts:signup' %}">Signup</a>
         </li>
         <li class="mx-2">
-          <a href="{% url 'accounts:login' %}">Login</a>
+          <a class="mes-btn mes-btn-wb text-decoration-none" href="{% url 'accounts:login' %}">Login</a>
         </li>
       </ul>
     {% endif %}
