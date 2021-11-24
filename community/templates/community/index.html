@@ -54,7 +54,7 @@
             </span>
           </div>
         </td>
-        <td>{{review.updated_at}}</td>
+        <td>{{review.updated_at|date:'Y. m. d. H:i' }}</td>
         <td><a class="text-decoration-none txt-white" href="{% url 'community:detail' review.pk %}">[detail]</a></td>
       </tr>
     {% endfor %}

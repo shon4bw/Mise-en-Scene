@@ -2,62 +2,76 @@
 {% load bootstrap5 %}
 {% load socialaccount %}
 
-
 {% block content %}
-  <h2 class="text-center">DETAIL</h2>
-  <h3>{{ review.pk }} 번째 글</h3>
-  <hr>
-  <p>제목: {{ review.title }}</p>
-  <p>영화 제목: {{ review.movie_title }}</p>
-  <p>내용: {{ review.content }}</p>
-  <p>평점: {{ review.rank }}</p>
-  <p>작성 시각: {{ review.created_at }}</p>
-  <p>수정 시각: {{ review.updated_at }}</p>
 
-  {% if user == review.user %}
-  <a href="{% url 'community:update' review.pk %}">[UPDATE]</a>
-  <form action="{% url 'community:review_delete' review.pk %}" method="POST">
-    {% csrf_token %}
-    <button>삭제</button>
-  </form>
-  {% endif %}
-  <hr>
-
-  <h4>댓글</h4>
-  {% if comments|length %}
-    <p><b>{{ comments|length }}개의 댓글이 있습니다.</b></p>
-  {% endif %}
-
-  {% for comment in comments %}
-    <li>
-      <a href="{% url 'accounts:profile' comment.user.username %}" class="text-decoration-none text-light fw-bold">
-        {{ comment.user }}
-      </a>
-      {{ comment.content }} 
-
-      {% if request.user == comment.user %}
-      <form style="display: inline-block;" action="{% url 'community:comment_delete' review.pk comment.pk %}" method="POST">
-        {% csrf_token %}
-        <button>[X]</button>
-      </form>
-      {{ comment.updated_at }}
+  <div class="col-8 mx-auto">
+    
+    <p style="color:#D1D5DB">[ {{ review.movie_title }} ]  {{ review.rank }}점</p>
+    <h2>{{ review.title }}</h2>
+      <!-- 프로필 사진  -->
+      {% if user.image %}
+        <img class="small_profile_img" src="{{ user.image.url }}" alt="프로필 사진">
+      {% else %}
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="small_profile_img bi bi-person-circle" viewBox="0 0 16 16">
+          <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+          <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+        </svg>
       {% endif %}
-    </li>
+      <a class="text-decoration-none txt-white" href="{% url 'accounts:profile' review.user.username %}">{{ review.user.username }}</a>
+    <!---->
+    <p style="color:#D1D5DB" class="text-end">{{ review.updated_at|date:'Y. m. d. H:i' }}</p>
+    <hr>
 
-  {% empty %}
-    <p><b>첫 댓글을 남겨주세요:)</b></p>
-  {% endfor %}
-  <hr>
-  {% if request.user.is_authenticated %}
-    <form action="{% url 'community:create_comment' review.pk %}" method="POST">
+    <p>{{ review.content }}</p>
+    <p>평점: {{ review.rank }}</p>
+    <p>작성 시각: {{ review.created_at }}</p>
+    <p>수정 시각: {{ review.updated_at|date:'Y. m. d. H:i'  }}</p>
+
+    {% if user == review.user %}
+    <a href="{% url 'community:update' review.pk %}">[UPDATE]</a>
+    <form action="{% url 'community:review_delete' review.pk %}" method="POST">
       {% csrf_token %}
-      {{ comment_form }}
-      <input type="submit">
+      <button>삭제</button>
     </form>
-  {% else %}
-    <a href="{% url 'accounts:login' %}">[댓글을 작성하려면 로그인하세요.]</a>
-  {% endif %}
-  <a href="{% url 'community:index' %}">[back]</a>
+    {% endif %}
+    <hr>
+
+    <h4>댓글</h4>
+    {% if comments|length %}
+      <p><b>{{ comments|length }}개의 댓글이 있습니다.</b></p>
+    {% endif %}
+
+    {% for comment in comments %}
+      <li>
+        <a href="{% url 'accounts:profile' comment.user.username %}" class="text-decoration-none text-light fw-bold">
+          {{ comment.user }}
+        </a>
+        {{ comment.content }} 
+
+        {% if request.user == comment.user %}
+        <form style="display: inline-block;" action="{% url 'community:comment_delete' review.pk comment.pk %}" method="POST">
+          {% csrf_token %}
+          <button>[X]</button>
+        </form>
+        {{ comment.updated_at }}
+        {% endif %}
+      </li>
+
+    {% empty %}
+      <p><b>첫 댓글을 남겨주세요:)</b></p>
+    {% endfor %}
+    <hr>
+    {% if request.user.is_authenticated %}
+      <form action="{% url 'community:create_comment' review.pk %}" method="POST">
+        {% csrf_token %}
+        {{ comment_form }}
+        <input type="submit">
+      </form>
+    {% else %}
+      <a href="{% url 'accounts:login' %}">[댓글을 작성하려면 로그인하세요.]</a>
+    {% endif %}
+    <a href="{% url 'community:index' %}">[back]</a>
+  </div>
 {% endblock  %}
 
 
