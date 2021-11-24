@@ -2,7 +2,9 @@
 
 {% block content %}
   <h1 style="display: inline-block;" >Community</h1>
-  <a href="{% url 'community:create'%}">New Review</a>
+  <a href="{% url 'community:create'%}" >New Review</a>
+    
+
   <hr>
 
   <table class="table">
@@ -66,6 +68,9 @@
             </nav>
         </div>
     </div>
+
+
+
 
 
   {% for review in reviews %}

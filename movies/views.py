@@ -9,6 +9,8 @@ from django.core.paginator import Paginator
 from django.core import serializers
 from django.http import HttpResponse
 from django.conf import settings
+from django.contrib.auth.forms import AuthenticationForm
+
 
 
 # Create your views here.
@@ -64,9 +66,11 @@ def index(request):
     import json
     f = open('./movies/fixtures/movies.json')
     data = json.load(f)
-    
+    form = AuthenticationForm()
+
     context = {
-        'movies' : data
+        'movies' : data,
+        'form': form,
     }
     return render(request, 'movies/index.html', context)
 

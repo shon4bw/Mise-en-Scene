@@ -5,7 +5,7 @@ from django.views.decorators.http import require_GET, require_POST, require_http
 from .models import Review, Comment
 from .forms import ReviewForm, CommentForm
 from django.core.paginator import Paginator
-
+from django.contrib.auth.forms import AuthenticationForm
 @require_GET
 def index(request):
     # # 일반 로그인과 소셜 로그인 분리
@@ -23,9 +23,13 @@ def index(request):
     paginator = Paginator(reviews, 10) #한 페이지 당 몇개 씩 보여줄 지 지정 
     
     boards = paginator.get_page(page)
+    form = AuthenticationForm()
+
     context = {
         'reviews': boards,
+        'form': form,
     }
+
 
     return render(request, 'community/index.html', context)
 
@@ -41,9 +45,11 @@ def create(request):
             return redirect('community:detail', review.pk)
     else:
         form = ReviewForm()
-    context = {
-        'form': form,
-    }
+        form1 = AuthenticationForm()
+        context = {
+            'form': form,
+            'form1':form1,
+        }
     return render(request, 'community/create.html', context)
 
 
@@ -52,10 +58,12 @@ def detail(request, review_pk):
     review = get_object_or_404(Review, pk=review_pk)
     comments = review.comment_set.all()
     comment_form = CommentForm()
+    form = AuthenticationForm()
     context = {
         'review': review,
         'comment_form': comment_form,
         'comments': comments,
+        'form':form,
     }
     return render(request, 'community/detail.html', context)
 
@@ -105,6 +113,7 @@ def create_comment(request, review_pk):
         'review': review,
         'comments': review.comment_set.all(),
     }
+
     return render(request, 'community/detail.html', context)
 
 @login_required
