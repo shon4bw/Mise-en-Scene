@@ -63,7 +63,7 @@ def index(request):
     
 
     # 데이터 셋 불러오기 (db 초기화시에만 주석 풀 것)
-    # fetch_movies(request)
+    #fetch_movies(request)
 
 
     movies = Movie.objects.all()
@@ -297,4 +297,5 @@ def search(request):
         }
 
         return render(request, 'movies/search.html', context)
+    
     
