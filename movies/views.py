@@ -10,7 +10,7 @@ from django.core import serializers
 from django.http import HttpResponse
 from django.conf import settings
 from django.db.models import Q
-
+from django.contrib.auth.forms import AuthenticationForm
 
 # Create your views here.
 # 데이터 패치(가져오기)
@@ -59,19 +59,21 @@ def fetch_movies(request):
 @require_safe
 def index(request):
     # movies = Movie.objects.all() -<- 여기서 할 건 이것뿐! TBDM API 주기적으로 가져오기 다른 함수에서!
-    # best -> 매일 새벽 3시에 자동으로 불러오기.....
+    # best -> 매일 새벽 3시에 자동으로 불러오기…..
     
 
     # 데이터 셋 불러오기 (db 초기화시에만 주석 풀 것)
-    #fetch_movies(request)
+    # fetch_movies(request)
+    import json
+    f = open('./movies/fixtures/movies.json')
+    data = json.load(f)
+    form = AuthenticationForm()
 
-
-    movies = Movie.objects.all()
     context = {
-        'movies' : movies
+        'movies' : data,
+        'form': form,
     }
     return render(request, 'movies/index.html', context)
-
 
 @require_safe
 def detail(request, movie_pk):

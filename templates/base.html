@@ -7,6 +7,49 @@
   <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
   <title>Mise en Scène</title>
+
+<style>
+            #modal {
+              display:none;
+              vertical-align: middle;
+              position:relative;
+              width:100%;
+              height:100%;
+              z-index:1;
+            }
+            #modal h2 {
+              margin:0;   
+            }
+
+            #modal button {
+              display:inline-block;
+              width:100px;
+              margin-left:calc(100% - 100px - 10px);
+            }
+
+            #modal .modal_content {
+              width:300px;
+              margin:auto;
+              padding:20px 10px;
+              background:rgba(0, 0, 0, 1);
+              border:2px solid #666;
+              position: absolute;
+              transform: translate(-50%,);
+              left: 50%;
+              top: 10%;
+            }
+
+            #modal .modal_layer {
+              position:fixed;
+              top:0;
+              left:100;
+              width:100%;
+              height:100%;
+              background:rgba(0, 0, 0, 0);
+              z-index:-1;
+            }   
+        </style>
+
 </head>
 <body style="background-color:#0F172A">
   <!-- CSS style 모음 파일 -->
@@ -74,10 +117,48 @@
         <li class="mx-2">
           <a class="mes-btn mes-btn-wb text-decoration-none" href="{% url 'accounts:signup' %}">Signup</a>
         </li>
+        <!--
         <li class="mx-2">
           <a class="mes-btn mes-btn-wb text-decoration-none" href="{% url 'accounts:login' %}">Login</a>
         </li>
+        -->
+        <li class="mx-2">
+        <a type="button" id="modal_open_btn" >Login</a>
+        </li>
+
       </ul>
+
+
+
+        <div id="modal">        
+          <div class="modal_content">
+              <div class="modal-body">
+                {% load bootstrap5 %}
+                {% load socialaccount %}
+
+                <div class="login" >
+                  <form action="/accounts/login/" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    {% bootstrap_field field %}
+                    {% endfor %}    
+                    <input type="submit">
+                  </form>
+                  <p>또는</p>
+                  <a href="{% provider_login_url "google" next="/movies/" %}">Google 계정으로 계속하기</a>
+                  <a href="{% provider_login_url "naver" next="/movies/" %}">NAVER 계정으로 계속하기</a>
+                  <a href="{% provider_login_url "kakao" next="/movies/" %}">Kakao 계정으로 계속하기</a>
+
+                </div>
+              </div>
+
+                <a type="button" id="modal_close_btn">닫기</a>
+          </div>
+        <div class="modal_layer"></div>
+        </div>
+
+      
+
     {% endif %}
   </nav> 
   <div class="container">
@@ -88,15 +169,24 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <!-- Lodash CDN -->
+  <!— Lodash CDN —>
   <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js" integrity="sha256-qXBd/EfAdjOA2FGrGAG+b3YBn2tn5A6bhz+LSgYD96k=" crossorigin="anonymous"></script>
-  <!-- Vue CDN -->
+  <!— Vue CDN —>
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
   <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
   <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
   {% block script %}
   {% endblock %}
-  
+
+<script>
+    document.getElementById("modal_open_btn").onclick = function() {
+        document.getElementById("modal").style.display="block";
+    }
+    document.getElementById("modal_close_btn").onclick = function() {
+        document.getElementById("modal").style.display="none";
+    }   
+</script>
+
 </body>
 </html>

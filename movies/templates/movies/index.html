@@ -1,3 +1,4 @@
+<html>
 {% extends 'base.html' %}
 
 {% block content %}
@@ -5,16 +6,21 @@
     <h1 class="fw-bold" style="color:#60A5FA;">Mise en Scène</h1>
     <h5>당신의 taste를 찾아보세요!</h5>
   </header>
-
-
   <div class="movie-list slider-for m-5">
     {% for movie in movies %}
+
+    {% if movie.model == "movies.movie" %}
+
       <div class="movie">
         <a href="{% url 'movies:detail' movie.pk%}">
           <img src="https://image.tmdb.org/t/p/original{{ movie.poster_path }}" style="padding: 10px;"alt="poster" width="400px" height="500px">
         </a>
       </div>
+
+      {% endif %}
+    
     {% endfor %}
+
   </div>
   {% if user.is_authenticated %}
     
@@ -61,7 +67,7 @@
   })
 
   let pageNum = 2
-
+  
   document.addEventListener('scroll', (event) => {
     console.log(event)
     const {scrollHeight, scrollTop, clientHeight} = document.documentElement
@@ -83,6 +89,7 @@
               <h3>${ movie.fields.title }</h3>
               <p>${ movie.fields.overview }</p>
               <a href="movies/${ movie.pk }/">[detail]</a>
+              <img src="${ movie.poster_path }">
               <hr>
             `
             movieDiv.innerHTML = movieHTML
@@ -95,3 +102,4 @@
 
 </script>
 {% endblock %}
+</html>
