@@ -2,8 +2,7 @@
 
 {% block content %}
   <h1 style="display: inline-block;" >Community</h1>
-  <a href="{% url 'community:create'%}" >New Review</a>
-    
+    <a class="mes-btn mes-btn-primary text-decoration-none" href="{% url 'community:create'%}">New Review</a>
 
   <hr>
 
@@ -15,92 +14,99 @@
   </style> 
   <thead>
     <tr>
-      <th>No.</th>
+      <th>글쓴이</th>
       <th>글 제목</th>
-      <th>공감 수</th>
+      <th>좋아요</th>
+      <th>업데이트</th>
+      <th>더보기</th>
+
     </tr>
   </thead>
-  <tbody>
-  {% for review in reviews %}
+    <tbody>
+    {% for review in reviews %}
       <tr>
-        <td>{{ review.pk }}</td>
-        <td><a href="{% url 'community:detail' review.pk %}">{{ review.title }}</a></th>
-        <td>{{review.like_users.count}}</td>
+        <td><a class="text-decoration-none txt-white" href="{% url 'accounts:profile' review.user %}">{{ review.user }}</a></td>
+        <td><a class="text-decoration-none txt-white" href="{% url 'community:detail' review.pk %}">{{ review.title }}</a></th>
+        <td>
+          <div class="d-flex align-items-center"> 
+            <form data-review-id="{{ review.pk }}" class="like-form" method="POST">
+              {% csrf_token %}
+              {% if user in review.like_users.all %}
+                <div>
+                  <button id="likeBtn-{{ review.pk }}" class="btn btn-link link-danger p-0 mx-2" >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                    </svg>
+                  </button>
+                </div>
+              {% else %}
+                <div>
+                  <button id="likeBtn-{{ review.pk }}" style="display: inline-block;" class="btn btn-link link-danger p-0 mx-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                      <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+                    </svg>
+                  </button>
+                </div>
+              {% endif %}
+            </form>      
+            <span id="likeCnt-{{ review.pk }}">
+              {{review.like_users.count}}
+            </span>
+          </div>
+        </td>
+        <td>{{review.updated_at}}</td>
+        <td><a class="text-decoration-none txt-white" href="{% url 'community:detail' review.pk %}">[detail]</a></td>
       </tr>
-  {% endfor %}
-  </tbody> 
+    {% endfor %}
+    </tbody> 
 </table>
+
+<!--Pagination-->
 <div class="row mt-2">
-        <div class="col-12">
-            <nav>
-                <ul class="pagination justify-content-center">
-                    {% if reviews.has_previous %}                         
-                    <li class="page-item">
-                        <a class="page-link" href="?p={{reviews.previous_page_number }}"><</a>
-                    </li>
-                    {% else %}
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#"><</a>
-                    </li>
-                    {% endif %}
-                    {% for page_number in reviews.paginator.page_range %}
-                    {% if page_number == reviews.number %}
-                    <li class="page-item active" aria-current="page">
-                    <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
-                    </li>
-                    {% else %}
-                    <li class="page-item">
-                    <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
-                    </li>
-                    {% endif %}
-                    {% endfor %}
-
-                    {% if reviews.has_next %}
-                    <li class="page-item">
-                        <a class="page-link" href="?p={{reviews.next_page_number }}">></a>
-                    </li>
-                    {% else %}
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#">></a>
-                    </li>
-                    {% endif %}
-                </ul>
-            </nav>
-        </div>
-    </div>
-
-
-
-
-
-  {% for review in reviews %}
-    <div>
-    <!--
-      <span id="likeCnt-{{ review.pk }}">
-        {{review.like_users.count}}명이 좋답니다!
-      </span>
-
-      <form data-review-id="{{ review.pk }}" class="like-form" method="POST">
-        {% csrf_token %}
-        {% if user in review.like_users.all %}
-          <input type="submit" id="likeBtn-{{ review.pk }}" value="좋아요 취소">
+  <div class="col-12">
+    <nav>
+      <ul class="pagination justify-content-center">
+        {% if reviews.has_previous %}                         
+        <li class="page-item">
+            <a class="page-link" href="?p={{reviews.previous_page_number }}"><</a>
+        </li>
         {% else %}
-          <input type="submit" id="likeBtn-{{ review.pk }}" value="좋아요">
+        <li class="page-item disabled">
+            <a class="page-link" href="#"><</a>
+        </li>
         {% endif %}
-      </form>
-      
-    </div>
-    <a href="{% url 'community:detail' review.pk %}">[detail]</a>
-    <hr>
-  {% endfor %}
-  -->
+        {% for page_number in reviews.paginator.page_range %}
+        {% if page_number == reviews.number %}
+        <li class="page-item active" aria-current="page">
+        <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+        </li>
+        {% else %}
+        <li class="page-item">
+        <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+        </li>
+        {% endif %}
+        {% endfor %}
+
+        {% if reviews.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?p={{reviews.next_page_number }}">></a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" href="#">></a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+</div>
 
 {% endblock %}
 
 
 {% block script %}
 <script>
-  const likeFormList = document.querySelectorAll('.like-form')
+const likeFormList = document.querySelectorAll('.like-form')
   likeFormList.forEach((likeForm)=> {
     likeForm.addEventListener('submit', (e)=> {
       e.preventDefault()
@@ -115,15 +121,27 @@
 
           const likeBtn = document.querySelector(`#likeBtn-${reviewId}`)
           likeBtn.value = liked ? '좋아요 취소' : '좋아요'
-
+          if (liked) {
+            // 좋아요 눌렀을 때 -> filled
+            likeBtn.innerHTML = 
+              `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+              </svg>`
+          } else {
+            likeBtn.innerHTML = 
+              `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+              </svg>`
+          }
           const likeCnt = document.querySelector(`#likeCnt-${reviewId}`)
-          likeCnt.innerText = `${likeCount}명이 좋답니다!`
+          likeCnt.innerText = `${likeCount}`
         })
         .catch((err)=> {
           window.alert(err)
         })
     })
-  })
+  }) 
+
 </script>
 {% endblock %}
 

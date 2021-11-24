@@ -5,7 +5,10 @@ from django.views.decorators.http import require_GET, require_POST, require_http
 from .models import Review, Comment
 from .forms import ReviewForm, CommentForm
 from django.core.paginator import Paginator
+from accounts.models import User
 from django.contrib.auth.forms import AuthenticationForm
+
+@login_required
 @require_GET
 def index(request):
     # # 일반 로그인과 소셜 로그인 분리
@@ -34,6 +37,7 @@ def index(request):
     return render(request, 'community/index.html', context)
 
 
+@login_required
 @require_http_methods(['GET', 'POST'])
 def create(request):
     if request.method == 'POST':
@@ -53,6 +57,7 @@ def create(request):
     return render(request, 'community/create.html', context)
 
 
+@login_required
 @require_GET
 def detail(request, review_pk):
     review = get_object_or_404(Review, pk=review_pk)
@@ -144,3 +149,26 @@ def like(request, review_pk):
             'like_count' : like_count,
         }
         return JsonResponse(context)
+
+# def search(request):
+#     users = User.objects.all()
+#     reviews = Review.objects.order_by('-pk')
+#     q = request.POST.get('q', "")
+
+#     if q[0] == '#':
+#         reviews = reviews.filter(content__contains=q[1:])
+#         context = {
+#             'reviews': reviews,
+#             'q': q,
+#         }
+#         return render(request, 'community/search.html', context)
+#     elif q:
+#         users = users.filter(username__icontains=q)
+#         context = {
+#             'users': users,
+#             'q': q,
+#         }
+#         return render(request, 'community/search.html', context)
+#     else:
+#         return render(request, 'community/search.html')
+

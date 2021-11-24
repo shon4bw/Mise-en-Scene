@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+  {% if not_found|length == 0 %}
+    <h3 class="mb-3">'<b>{{ keyword }}</b>'에 해당하는 영화입니다.</h3>
+  {% else %}
+    <h3>아이고! '<b>{{ keyword }}</b>'{{ not_found }}</h3>
+  {% endif %}
+  <hr>
+  {% if message|length != 0 %}
+    <h5>{{ message }}</h5>
+  {% endif %}
+
+  <div class="row">
+    {% for movie in movies %}
+      <div class="col-3">
+        <div class=" mb-3" style="max-width: 20rem;">
+          <a href="{% url 'movies:detail' movie.pk %}">
+            <img class="img-fluid" alt="포스터" src="https://image.tmdb.org/t/p/w500/{{ movie.poster_path }}">
+          </a>
+        </div>
+      </div>
+    {% endfor %}  
+  </div>
+
+{% endblock %}
