@@ -6,7 +6,6 @@ from .models import Review, Comment
 from .forms import ReviewForm, CommentForm
 from django.core.paginator import Paginator
 from accounts.models import User
-from django.contrib.auth.forms import AuthenticationForm
 
 @login_required
 @require_GET
@@ -26,13 +25,9 @@ def index(request):
     paginator = Paginator(reviews, 10) #한 페이지 당 몇개 씩 보여줄 지 지정 
     
     boards = paginator.get_page(page)
-    form = AuthenticationForm()
-
     context = {
         'reviews': boards,
-        'form': form,
     }
-
 
     return render(request, 'community/index.html', context)
 
@@ -49,11 +44,9 @@ def create(request):
             return redirect('community:detail', review.pk)
     else:
         form = ReviewForm()
-        form1 = AuthenticationForm()
-        context = {
-            'form': form,
-            'form1':form1,
-        }
+    context = {
+        'form': form,
+    }
     return render(request, 'community/create.html', context)
 
 
@@ -63,12 +56,10 @@ def detail(request, review_pk):
     review = get_object_or_404(Review, pk=review_pk)
     comments = review.comment_set.all()
     comment_form = CommentForm()
-    form = AuthenticationForm()
     context = {
         'review': review,
         'comment_form': comment_form,
         'comments': comments,
-        'form':form,
     }
     return render(request, 'community/detail.html', context)
 
@@ -118,7 +109,6 @@ def create_comment(request, review_pk):
         'review': review,
         'comments': review.comment_set.all(),
     }
-
     return render(request, 'community/detail.html', context)
 
 @login_required

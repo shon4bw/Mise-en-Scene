@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.naver',
     'allauth.socialaccount.providers.google',
 
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -190,5 +191,7 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
+
+STATIC_URL = '/static/'
 
 YOUTUBE_API_KEY = 'AIzaSyBK9jTxPfTujDLL1e2Z8Y__1dav6DlZ-wA'

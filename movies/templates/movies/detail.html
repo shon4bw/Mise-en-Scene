@@ -1,26 +1,64 @@
 {% extends 'base.html' %}
 
+
 {% block content %}
-  <h3>{{ movie.title }}</h3>
+  <h2>{{ movie.title }}</h2>
   <hr>
-  <img src="https://image.tmdb.org/t/p/w400{{ movie.poster_path }}" alt="poster">
-  <p>개봉일: {{ movie.release_date }}</p>
-  <p>관객수: {{ movie.popularity }}</p>
-  <p>평점: {{ movie.vote_average }}</p>
-  <p>줄거리: {{ movie.overview }}</p>
-  <p>장르: 
-    {% for genre in movie.genres.all %}
-      {{ genre.name }}
-    {% endfor %}
-  </p>
+  <div style="width:400px; height:570px; border:1px; float:left;">
+    <img src="https://image.tmdb.org/t/p/w400{{ movie.poster_path }}" alt="poster">
+  </div>
+  <div style="width:800px; height:300px; border:1px;  float:left; padding:20px; ">
+    <!--
+    <h2>개봉일:</h2><p style=font-family: Verdana, Geneva, Arial, sans-serif;> {{ movie.release_date }}<br>
+    관객수: {{ movie.popularity }}
+    평점: {{ movie.vote_average }}
+    -->
+    <h3>소개</h3><p style=font-family: Verdana, Geneva, Arial, sans-serif ;> 
+    {{ movie.overview }}
+    <br><br>
+
+    
+      
+
+
+<!--재생 버튼-->
+
+
+<div>
+  <div>
+  <a data-movie-pk={{movie.pk}} class='video' href="{% url 'movies:video' movie.pk%} ">
+    <button type="button" class="btns" >
+      <style>
+      .btns{
+        background:RGB(17, 22, 42);
+        float: left;
+        width:30px;
+        height:30px;
+        margin-top:5px;
+        margin-right:15px;
+        
+        border-color:transparent transparent transparent #60A5FA;
+        border-style:solid solid solid solid;
+        border-width:15px 0 15px 30px;
+      }
+      </style>
+
+
+    </button>
+    
+  </a>
   
+  
+
+  
+  <div>
   {% if user.is_authenticated %}
-    <form data-movie-pk="{{movie.pk}}" class='box-form' method="POST">
+    <form data-movie-pk="{{movie.pk}}" class='box-form'  method="POST">
       {% csrf_token %}
         {% if movie in user.like_movies.all %}
           <div>
             <button id="boxBtn-{{ movie.pk }}" class="btn btn-link link-danger p-0 mx-2" >
-              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-cart-x" viewBox="0 0 16 16">
+              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" style="fill:#60A5FA" class="bi bi-cart-x" viewBox="0 0 16 16">
                 <path d="M7.354 5.646a.5.5 0 1 0-.708.708L7.793 7.5 6.646 8.646a.5.5 0 1 0 .708.708L8.5 8.207l1.146 1.147a.5.5 0 0 0 .708-.708L9.207 7.5l1.147-1.146a.5.5 0 0 0-.708-.708L8.5 6.793 7.354 5.646z"/>
                 <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zm3.915 10L3.102 4h10.796l-1.313 7h-8.17zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
               </svg>
@@ -29,20 +67,26 @@
         {% else %}
           <div>
             <button id="boxBtn-{{ movie.pk }}" style="display: inline-block;" class="btn btn-link link-danger p-0 mx-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-cart-plus-fill" viewBox="0 0 16 16">
+              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" style="fill:#60A5FA"class="bi bi-cart-plus-fill" viewBox="0 0 16 16">
                 <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0z"/>
               </svg>
             </button>
           </div>
         {% endif %}
+
     </form>
+  </div>
   {% endif %}
-  
-  <a data-movie-pk={{movie.pk}} class='video' href="{% url 'movies:video' movie.pk%} ">재생</a> 
-  
-
-
+  {% if user.is_authenticated %}
+    <span class="my-3">재생&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my box</span>
+  {% else %}
+    <br><br>
+    <span>재생</span>
+  {% endif %}
+    </span>
 {% endblock %}
+<!--장바구니-->
+<div style="float:left;  margin:10px; ">
 {% block script %}
 <script>
 const boxFormList = document.querySelectorAll('.box-form')
@@ -64,19 +108,19 @@ boxFormList.forEach((boxForm)=> {
           // 담기 눌렀을 때 -> x 표시된 장바구니
         //console.log('check')
           boxBtn.innerHTML = 
-            `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-cart-x" viewBox="0 0 16 16">
-              <path d="M7.354 5.646a.5.5 0 1 0-.708.708L7.793 7.5 6.646 8.646a.5.5 0 1 0 .708.708L8.5 8.207l1.146 1.147a.5.5 0 0 0 .708-.708L9.207 7.5l1.147-1.146a.5.5 0 0 0-.708-.708L8.5 6.793 7.354 5.646z"/>
-              <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zm3.915 10L3.102 4h10.796l-1.313 7h-8.17zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+            `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor"  style="fill:#60A5FA" class="bi bi-cart-x" viewBox="0 0 16 16">
+              <path  d="M7.354 5.646a.5.5 0 1 0-.708.708L7.793 7.5 6.646 8.646a.5.5 0 1 0 .708.708L8.5 8.207l1.146 1.147a.5.5 0 0 0 .708-.708L9.207 7.5l1.147-1.146a.5.5 0 0 0-.708-.708L8.5 6.793 7.354 5.646z"/>
+              <path   d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zm3.915 10L3.102 4h10.796l-1.313 7h-8.17zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
             </svg>`
-          
+            
           const confirmed = confirm('My Box에 추가되었습니다. 이동하시겠습니까?')
           if (confirmed) {
             window.location.href = '/movies/mybox/'
           }
         } else {
           boxBtn.innerHTML = 
-            `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-cart-plus-fill" viewBox="0 0 16 16">
-              <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0z"/>
+            `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor"  style="fill:#60A5FA" class="bi bi-cart-plus-fill" viewBox="0 0 16 16">
+              <path  d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0z"/>
             </svg>`
         }
       })
@@ -85,7 +129,6 @@ boxFormList.forEach((boxForm)=> {
       })
   })
 })
-
 
 const video = document.querySelector('.video')
 boxForm.addEventListener('click', (e)=> {
@@ -97,7 +140,31 @@ boxForm.addEventListener('click', (e)=> {
   })
 }) 
 
-
 </script>
+
+
+
+<!--
+<p>
+  <span style="font-size:200%"> 
+    {% for genre in movie.genres.all %}
+      {{ genre.name }}
+    {% endfor %}
+  </span>
+  <span style="font-size:120%"> 
+  추천 다른 영화
+  </span>
+  -->
+  <br>
+  <p><strong>상세정보</strong><br></p>
+  <p><span class="previewModal--tags-label">개봉일 :</span>
+  <a>{{ movie.release_date }}</a></p>
+  <p><span class="previewModal--tags-label">평점 :</span>
+  <a>{{ movie.vote_average }}</a></p>
+
+
+
+
+<p>
 {% endblock %}
 

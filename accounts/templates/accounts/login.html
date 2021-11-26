@@ -9,15 +9,22 @@
     {% csrf_token %}
     {% bootstrap_form form %}
     <div class="d-grid gap-2">
-      <button class="mes-btn mes-btn-indigo text-decoration-none" type="submit" role="button">
+      <button class="mes-btn mes-btn-main-color text-decoration-none" type="submit" role="button">
         로그인
       </button>
     </div>
   </form>
   <br>
-  <a href="{% provider_login_url "google" next="/movies/" %}">Google 계정으로 계속하기</a>
-  <a href="{% provider_login_url "naver" next="/movies/" %}">NAVER 계정으로 계속하기</a>
-  <a href="{% provider_login_url "kakao" next="/movies/" %}">Kakao 계정으로 계속하기</a>
+  <p class="text-center">또는</p>
+  
+  <div class="d-grid gap-2 text-center">
+  
+    <a class="mes-social mes-google text-decoration-none my-1" href="{% provider_login_url "google" next="/movies/" %}">
+        Google로 계속하기
+    </a>
+    <a class="mes-social mes-naver text-decoration-none my-1" href="{% provider_login_url "naver" next="/movies/" %}">NAVER로 계속하기</a>
+    <a class="mes-social mes-btn-gold text-decoration-none my-1" href="{% provider_login_url "kakao" next="/movies/" %}">Kakao로 계속하기</a>
+  </div>
 
 </div>
 {% endblock  %}

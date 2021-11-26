@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>My box</h2>
+
+  <h1>My box</h1>
     <div class="slider-for">
     {% for my_movie in request.user.like_movies.all %}
       <a href="{% url 'movies:detail' my_movie.pk%}">
@@ -10,13 +11,15 @@
     {% endfor %}
   </div>
 
-  <h2>추천 목록</h2>
-  <div class="slider-for">
-    {% for movie in random_movies %}
-      <a href="{% url 'movies:detail' movie.pk%}">
-        <img src="https://image.tmdb.org/t/p/original{{ movie.poster_path }}" style="padding: 10px;"alt="poster" width="400px" height="500px">
-      </a>
-    {% endfor %}
+  <div class="my-5">
+    <h2><strong>{{ user.username }}</strong>  님의 box 기반 추천</h2>
+    <div class="slider-for">
+      {% for movie in random_movies %}
+        <a href="{% url 'movies:detail' movie.pk%}">
+          <img src="https://image.tmdb.org/t/p/original{{ movie.poster_path }}" style="padding: 10px;"alt="poster" width="400px" height="500px">
+        </a>
+      {% endfor %}
+    </div>
   </div>
 
   

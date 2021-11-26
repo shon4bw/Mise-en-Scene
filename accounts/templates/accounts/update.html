@@ -2,10 +2,14 @@
 {% load bootstrap5 %}
 {% block content %}
 
-<form action="" method="POST" enctype="multipart/form-data">
-  {% csrf_token %}
-  {% bootstrap_form form %}
-  <input type="submit">
-</form>
+<div style="padding: 20px 300px;">
+  <form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+      <input class="mes-btn mes-btn-main-color" type="submit">
+    </div>
+  </form>
+</div>
 
 {% endblock %}

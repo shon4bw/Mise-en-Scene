@@ -10,7 +10,7 @@ from django.core import serializers
 from django.http import HttpResponse
 from django.conf import settings
 from django.db.models import Q
-from django.contrib.auth.forms import AuthenticationForm
+
 
 # Create your views here.
 # 데이터 패치(가져오기)
@@ -27,7 +27,7 @@ def fetch_movies(request):
         }
         genre, created = Genre.objects.get_or_create(**context)
 
-    for page in range(1, 6):
+    for page in range(1, 51):
         
         url = f'{TMDB_URL}movie/top_rated?api_key={API_KEY}&language=ko-KR&page={page}&region=KR'
         # url = f'https://api.themoviedb.org/3/movie/top_rated?api_key={API_KEY}&language=ko-KR&page={page}&region=KR'
@@ -59,28 +59,40 @@ def fetch_movies(request):
 @require_safe
 def index(request):
     # movies = Movie.objects.all() -<- 여기서 할 건 이것뿐! TBDM API 주기적으로 가져오기 다른 함수에서!
-    # best -> 매일 새벽 3시에 자동으로 불러오기…..
+    # best -> 매일 새벽 3시에 자동으로 불러오기.....
     
 
+    # 전체 영화 장르 가져오기
+    # 장르 리스트에서 3가지 랜덤으로 뽑기
+    # 뽑힌 장르를 가진 영화를 4개 샘플링해서 보여주기
+
     # 데이터 셋 불러오기 (db 초기화시에만 주석 풀 것)
-    # fetch_movies(request)
-    import json
-    f = open('./movies/fixtures/movies.json')
-    data = json.load(f)
-    form = AuthenticationForm()
+    #fetch_movies(request)
+
+    
+    random_movies = []
+    movies = Movie.objects.all()
+    genres = Genre.objects.order_by('?').distinct()[:3]
+    for genre in genres:
+        movies = genre.movie_genres.order_by('?').distinct()[:10]
+        random_movie = {
+            'name': genre.name,
+            'movies': movies
+        }
+        random_movies.append(random_movie)
 
     context = {
-        'movies' : data,
-        'form': form,
+        'movies' : movies,
+        'random_movies' : random_movies
     }
     return render(request, 'movies/index.html', context)
+
 
 @require_safe
 def detail(request, movie_pk):
     movie = get_object_or_404(Movie, pk=movie_pk)
     context = {
         'movie' : movie,
-        
     }
     return render(request, 'movies/detail.html', context)
 
@@ -278,7 +290,7 @@ def search(request):
     keyword = request.GET['keyword']
 
     if keyword:
-        movies = Movie.objects.filter(Q(title__icontains=keyword) | Q(release_date__icontains=keyword) | Q(overview__icontains=keyword)).distinct() #SELECT * FROM Movie WHERE 두번째 Q or 첫번째 Q
+        movies = Movie.objects.filter(Q(title__icontains=keyword) | Q(overview__icontains=keyword)).distinct() #SELECT * FROM Movie WHERE 두번째 Q or 첫번째 Q
         not_found = ''
         message = ''
 
@@ -291,13 +303,23 @@ def search(request):
             not_found = '에 해당하는 영화가 없어요'
             message = '👇 대신 이건 어떠신가요?'
 
-        context = {
-            'keyword': keyword,
-            'movies': movies,
-            'not_found': not_found,
-            'message': message,
-        }
+    else : # empty
+        genres = Genre.objects.all()
+        random_genre = random.randrange(0, len(genres))
+        genre_id = genres[random_genre].genre_id
+        g = Genre.objects.get(genre_id=genre_id)
+        movies = g.movie_genres.all()
+        not_found = '공란이네요! 검색어를 입력해주세요'
+        message = '👇 요즘 핫한 영화들을 둘러보세요!'
 
-        return render(request, 'movies/search.html', context)
+    context = {
+        'keyword': keyword,
+        'movies': movies,
+        'not_found': not_found,
+        'message': message,
+    }
+
+
+    return render(request, 'movies/search.html', context)
     
     

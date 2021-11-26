@@ -1,28 +1,43 @@
-<html>
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="m-5">
   <header class="text-center m-5">
     <h1 class="fw-bold" style="color:#60A5FA;">Mise en Scène</h1>
-    <h5>당신의 taste를 찾아보세요!</h5>
+    <h5>당신의 taste를 공유해주세요!</h5>
   </header>
+
+
   <div class="movie-list slider-for m-5">
     {% for movie in movies %}
-
-    {% if movie.model == "movies.movie" %}
-
       <div class="movie">
         <a href="{% url 'movies:detail' movie.pk%}">
           <img src="https://image.tmdb.org/t/p/original{{ movie.poster_path }}" style="padding: 10px;"alt="poster" width="400px" height="500px">
         </a>
       </div>
-
-      {% endif %}
-    
     {% endfor %}
-
   </div>
   {% if user.is_authenticated %}
+    <section class="text-center m-5">
+      <h4>My box에 마음에 드는 영화를 담으면</h4>
+      <h4>당신이 좋아할 만한 영화를 추천합니다:)</h4>
+    </section>
+    {% for random_movie in random_movies %}
+      <div>
+        <h5>{{ random_movie.name }}</h5>
+        <div class="slider-list">
+        {% for movie in random_movie.movies %}
+          <a href="{% url 'movies:detail' movie.pk%}">
+            <img src="https://image.tmdb.org/t/p/original{{ movie.poster_path }}" style="padding: 10px;"alt="poster" width="200px" height="300px">
+          </a>
+        {% endfor %}
+        </div>
+      </div>
+      <br>
+    {% endfor %}
+
+
+
     
   {% else %}
     <div class="text-center">
@@ -33,11 +48,36 @@
       <a class="btn btn-outline-success" href="{% url 'accounts:login' %}">Share Your Taste Now!</a>
     </div>
   {% endif %}
+</div>
 
 {% endblock %}
 
 {% block script %}
 <script>
+  $(function(){
+    $('.slider-list').slick({
+        slidesToShow: 6,
+        slidesToScroll: 1,
+        speed : 250,
+        arrows : true,
+        responsive: [ // 반응형 웹 구현 옵션
+					{  
+						breakpoint: 1280, 
+						settings: {
+							//위에 옵션이 디폴트 , 여기에 추가하면 그걸로 변경
+							slidesToShow:4 
+						} 
+					},
+          { 
+						breakpoint: 768, 
+						settings: {	
+							//위에 옵션이 디폴트 , 여기에 추가하면 그걸로 변경
+							slidesToShow:2 
+						} 
+					}
+				]
+      });
+  })
   $(function(){
     $('.slider-for').slick({
         infinite: true,
@@ -67,7 +107,7 @@
   })
 
   let pageNum = 2
-  
+
   document.addEventListener('scroll', (event) => {
     console.log(event)
     const {scrollHeight, scrollTop, clientHeight} = document.documentElement
@@ -89,7 +129,6 @@
               <h3>${ movie.fields.title }</h3>
               <p>${ movie.fields.overview }</p>
               <a href="movies/${ movie.pk }/">[detail]</a>
-              <img src="${ movie.poster_path }">
               <hr>
             `
             movieDiv.innerHTML = movieHTML
@@ -102,4 +141,3 @@
 
 </script>
 {% endblock %}
-</html>

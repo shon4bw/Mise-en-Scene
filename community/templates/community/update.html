@@ -1,12 +1,19 @@
 {% extends 'base.html' %}
+{% load bootstrap5 %}
 
 {% block content %}
-  <h1>UPDATE</h1>
+<div style="padding: 20px 300px;">
+  <h1>수정하기</h1>
   <form action="{% url 'community:update' review.pk %}" method="POST">
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="수정">
+    {% bootstrap_form form %}
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+      <input class="mes-btn mes-btn-gold" type="submit" value="수정">
+    </div>
   </form>
   <hr>
-  <a href="{% url 'community:index' %}">[back]</a>
+  <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+    <a class="btn mes-btn btn-secondary"href="{% url 'community:index' %}">뒤로</a>
+  </div>
+</div>
 {% endblock content %}

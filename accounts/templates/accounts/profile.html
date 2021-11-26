@@ -20,7 +20,7 @@
     <div class="col-9">
       <span class="user_name_txt">{{ person.username }}</span>
       {% if user.is_authenticated %}
-        <a class="m-3 align-end mes-btn mes-btn-wb text-decoration-none" href="{% url 'accounts:update' request.user.pk %}">
+        <a class="m-3 align-end mes-btn mes-btn-gold text-decoration-none" href="{% url 'accounts:update' request.user.pk %}">
           프로필 편집
         </a>
       {% endif %}
@@ -59,23 +59,33 @@
 
 <table class="table">
   <style>    
-table, th, td {    
-text-align: center;  
+table, td {    
+  text-align: center;
+  border-top: 1px solid #444444;
 }    
+
+thead{
+  background-color: #D1D5DB;  
+  text-align: center;
+}
 </style> 
   <thead>
     <tr>
-      <th>No.</th>
-      <th>글 제목</th>
-      <th>좋아요 수</th>
+  
+      <th style="color:#0F172A">글 제목</th>
+      <th style="color:#0F172A">좋아요</th>
+      <th style="color:#0F172A">업데이트</th>
+      <th style="color:#0F172A">더보기</th>
+
     </tr>
   </thead>
   <tbody>
   {% for article in articles %}
       <tr>
-        <td>{{ article.pk }}</td>
         <td><a class="text-decoration-none txt-white" href="{% url 'community:detail' article.pk %}">{{ article.title }}</a></td>
         <td>{{article.like_users.count}}</td>
+        <td>{{article.updated_at|date:'Y. m. d. H:i' }}</td>
+        <td><a class="text-decoration-none txt-white" href="{% url 'community:detail' article.pk %}">[detail]</a></td>
       </tr>
   {% endfor %}
   </tbody> 

@@ -2,23 +2,28 @@
 
 {% block content %}
   <h1 style="display: inline-block;" >Community</h1>
-    <a class="mes-btn mes-btn-primary text-decoration-none" href="{% url 'community:create'%}">New Review</a>
-
+    <a class="mes-btn mes-btn-gold text-decoration-none" href="{% url 'community:create'%}">글쓰기</a>
   <hr>
 
   <table class="table">
   <style>    
-  table, th, td {    
-  text-align: center;  
-  }    
+    table, td {    
+      text-align: center;
+      border-top: 1px solid #444444;
+    }    
+
+    thead{
+      background-color: #D1D5DB;  
+      text-align: center;
+    }
   </style> 
   <thead>
     <tr>
-      <th>글쓴이</th>
-      <th>글 제목</th>
-      <th>좋아요</th>
-      <th>업데이트</th>
-      <th>더보기</th>
+      <th style="color:#0F172A">글쓴이</th>
+      <th style="color:#0F172A">글 제목</th>
+      <th style="color:#0F172A">좋아요</th>
+      <th style="color:#0F172A">업데이트</th>
+      <th style="color:#0F172A">더보기</th>
 
     </tr>
   </thead>
@@ -55,7 +60,7 @@
           </div>
         </td>
         <td>{{review.updated_at|date:'Y. m. d. H:i' }}</td>
-        <td><a class="text-decoration-none txt-white" href="{% url 'community:detail' review.pk %}">[detail]</a></td>
+        <td><a class=" text-decoration-none txt-white" href="{% url 'community:detail' review.pk %}">[detail]</a></td>
       </tr>
     {% endfor %}
     </tbody> 
