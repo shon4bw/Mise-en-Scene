@@ -10,7 +10,7 @@
 
 # 팀원 소개 및 역할😎
 
-- **김채련 **: HTML/CSS/JavaScripts, django, Bootstrap
+- **김채련**: HTML/CSS/JavaScripts, django, Bootstrap
 
 - **손선우** : HTML/CSS/JavaScripts, django, Bootstrap, Social login, Payment, Search
 - **최윤석** : HTML/CSS/JavaScripts, django, Bootstrap, TMDB API, Recommendation Algorithms
