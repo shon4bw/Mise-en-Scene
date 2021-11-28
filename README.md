@@ -1,8 +1,4 @@
-사진 자리
-
-# 목차
-
-[toc]
+![image-20211128213528981](README.assets/image-20211128213528981.png)
 
 # 프로젝트 소개🎬
 
@@ -49,7 +45,7 @@
 
 - **ERD**
 
-![image-20211126013217326](C:\Users\82107\AppData\Roaming\Typora\typora-user-images\image-20211126013217326.png)
+![image-20211128213637880](README.assets/image-20211128213637880.png)
 
 - **UI_Kakao oven**
 
