@@ -1,4 +1,4 @@
-![image-20211128213528981](README.assets/image-20211128213528981.png){: width="100" height="100"}
+![image-20211128213528981](README.assets/image-20211128213528981.png){: width="100%" height="100%"}
 
 # 목차
 
