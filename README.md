@@ -1,4 +1,4 @@
-![image-20211128213528981](README.assets/image-20211128213528981.png){: width="100%" height="100%"}
+<img src="README.assets/image-20211128213528981.png" width="400" height="200">
 
 # 목차
 
@@ -30,13 +30,13 @@
 
 - **Frontend & Backend**
 
-  ![image-20211126021947118](README.assets/image-20211126021947118.png)
+  <img src="README.assets/image-20211126021947118.png" width="500" height="200">
 
 
 
 - **API**
 
-  ![image-20211211234200411](README.assets/image-20211211234200411.png)
+  <img src="README.assets/image-20211211234200411.png" width="500" height="200">
 
 # 주요 기능 목록
 
@@ -56,7 +56,7 @@
 
 - **ERD**
 
-![image-20211128213637880](README.assets/image-20211128213637880.png)
+  <img src="README.assets/image-20211128213637880.png" width="600" height="650">
 
 - **UI_Kakao oven**
 
