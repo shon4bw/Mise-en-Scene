@@ -25,7 +25,7 @@
 
 - **API**
 
-![image-20211126021056204](README.assets/image-20211126021056204.png)
+  ![image-20211211234200411](README.assets/image-20211211234200411.png)
 
 # 주요 기능 목록
 
