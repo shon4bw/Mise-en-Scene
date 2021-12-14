@@ -16,7 +16,7 @@ from django.db.models import Q
 # 데이터 패치(가져오기)
 def fetch_movies(request):
 
-    API_KEY = 'be07aab38070bed23b07aa9d9da3e0e2'
+    API_KEY = 'your_API_KEY'
     TMDB_URL = 'https://api.themoviedb.org/3/'
 
     genres = requests.get(TMDB_URL + 'genre/movie/list' + f'?api_key={API_KEY}' + '&language=ko-kr').json().get('genres')

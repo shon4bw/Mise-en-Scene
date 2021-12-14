@@ -165,8 +165,8 @@ SOCIALACCOUNT_PROVIDERS = {
         # (``socialaccount`` app) containing the required client
         # credentials, or list them here:
         'APP': {
-            'client_id': '721423814731-dfmmej44kts0f1nlo6lftr7tdaducbqq.apps.googleusercontent.com',
-            'secret': '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',
+            'client_id': 'your_client_id',
+            'secret': 'your_secret',
             'key': ''
         }
     },
@@ -175,8 +175,8 @@ SOCIALACCOUNT_PROVIDERS = {
         # (``socialaccount`` app) containing the required client
         # credentials, or list them here:
         'APP': {
-            'client_id': '3lYQktTT1ACVGf9wMXUY',
-            'secret': 'dhj4_yRvCL',
+            'client_id': 'your_client_id',
+            'secret': 'your_secret',
             'key': ''
         }
     },
@@ -185,7 +185,7 @@ SOCIALACCOUNT_PROVIDERS = {
         # (``socialaccount`` app) containing the required client
         # credentials, or list them here:
         'APP': {
-            'client_id': '42a0571fe9d27ca9810a5e953a9f87fc',
+            'client_id': 'your_client_id',
             'secret': '',
             'key': ''
         }
@@ -194,4 +194,4 @@ SOCIALACCOUNT_PROVIDERS = {
 
 STATIC_URL = '/static/'
 
-YOUTUBE_API_KEY = 'AIzaSyBK9jTxPfTujDLL1e2Z8Y__1dav6DlZ-wA'
+YOUTUBE_API_KEY = 'your_YOUTUBE_API_KEY'
